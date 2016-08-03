@@ -9,12 +9,12 @@
         "removeComments": false,
         "noImplicitAny": false,
         "declaration": true,
-        "outDir": "build"
+        "outDir": "."
     },
     "compileOnSave": false,
     "buildOnSave": false,
     "filesGlob" : 
-        "src/**/*.ts",
+        "**/*.ts",
     "exclude":["node_modules", "build", "typings", "test"]
     
     
