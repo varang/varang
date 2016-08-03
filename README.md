@@ -55,3 +55,10 @@ and this is the output.
 4. Supports ajax based pagination
 5. Configrable for remote json format. 
 
+### Next to do
+
+1. Headers will be implemented.
+2. Sorting
+3. Page size combobox.
+4. Checkboxed rows
+5. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick
