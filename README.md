@@ -50,7 +50,7 @@ and this is the output.
 ### Vargrid-v008 has the functionalities below.
 
 1. Built on Semantic-ui css framework.
-2. Supports configurable Ajax GET and POST methods
+2. Supports configurable GET and POST methods
 3. Supports local (static) and remote (ajax) data sources.
 4. Supports ajax based pagination
 5. Configrable for remote json format. 
