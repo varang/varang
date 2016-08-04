@@ -49,6 +49,7 @@ and this is the output.
 ### VarGrid-v008 has the functionalities below.
 
 VarGrid;
+
 1. is built on Semantic-ui css framework.
 2. supports configurable GET and POST methods
 3. supports local (static) and remote (ajax) data sources.
