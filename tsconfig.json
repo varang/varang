@@ -15,12 +15,7 @@
     "buildOnSave": false,
     "filesGlob" : [
         "**/*.ts",
-	"node_modules/angular2/typings/browser.d.ts"
-	],
-    "exclude":[
-	"node_modules", 
-	"typings", 
-	"build"
+	"!node_modules/**"
 	]
     
     
