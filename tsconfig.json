@@ -9,7 +9,7 @@
         "removeComments": false,
         "noImplicitAny": false,
         "declaration": true,
-        "outDir": "build"
+        "outDir": "."
     },
     "compileOnSave": false,
     "buildOnSave": false,

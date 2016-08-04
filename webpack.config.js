@@ -2,9 +2,9 @@ var webpack = require("webpack");
 
 module.exports = {
     entry: {
-        'polyfills': './build/showcase/polyfills.js',
-        'vendor': './build/showcase/vendor.js',
-        'app': './build/showcase/main.js'
+        'polyfills': './showcase/polyfills.js',
+        'vendor': './showcase/vendor.js',
+        'app': './showcase/main.js'
     },
     output: {
         path: __dirname,
