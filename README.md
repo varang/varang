@@ -1,6 +1,6 @@
 # VarAng UI Components
 
-VarAng is a UI components library based on Angular 2. At the moment, an Ajax based data table (grid) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang). Here is the syntax.
+VarAng is a UI components library based on Angular 2. At the moment VarGrid (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang). Here is the syntax.
 
 ```html
 <VarGrid>
@@ -46,13 +46,15 @@ and this is the output.
 
 ![Basic apperance of VarGrid-v008] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v008-output.png "Var Grid v008 output screenshot")
 
-### Vargrid-v008 has the functionalities below.
+### VarGrid-v008 has the functionalities below.
 
-1. Built on Semantic-ui css framework.
+VarGrid
+
+1. is built on Semantic-ui css framework.
 2. Supports configurable GET and POST methods
 3. Supports local (static) and remote (ajax) data sources.
 4. Supports ajax based pagination
-5. Configrable for remote json format. 
+5. is configurable for different json formats of varying data source. 
 
 ### Next to do
 
@@ -60,4 +62,4 @@ and this is the output.
 2. Sorting
 3. Page size combobox.
 4. Checkboxed rows
-5. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick
+5. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
