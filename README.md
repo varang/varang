@@ -48,12 +48,11 @@ and this is the output.
 
 ### VarGrid-v008 has the functionalities below.
 
-VarGrid
-
+VarGrid;
 1. is built on Semantic-ui css framework.
-2. Supports configurable GET and POST methods
-3. Supports local (static) and remote (ajax) data sources.
-4. Supports ajax based pagination
+2. supports configurable GET and POST methods
+3. supports local (static) and remote (ajax) data sources.
+4. supports ajax based pagination
 5. is configurable for different json formats of varying data source. 
 
 ### Next to do
