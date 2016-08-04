@@ -1,5 +1,3 @@
-///<reference path="../node_modules/angular2/typings/browser.d.ts"/> 
-
 import {Component, 
         Directive, 
         ViewChild, 
@@ -18,7 +16,7 @@ import {Component,
         Inject
       } from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import {RemotePagerParams, ClientPagerParams,DataSourceProperties} from "../models/core";
+import {RemotePagerParams, ClientPagerParams,DataSourceProperties} from "./core";
 
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
 // 		fff</VarGridClientPagerParams>

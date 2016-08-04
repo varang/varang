@@ -1,2 +1,3 @@
-export * from './components/var-grid.component';
-export * from './models/core';
+///<reference path="node_modules/angular2/typings/browser.d.ts"/>
+export * from './components/VarGrid';
+export * from './components/core';

@@ -9,13 +9,19 @@
         "removeComments": false,
         "noImplicitAny": false,
         "declaration": true,
-        "outDir": "."
+        "outDir": "build"
     },
     "compileOnSave": false,
     "buildOnSave": false,
-    "filesGlob" : 
+    "filesGlob" : [
         "**/*.ts",
-    "exclude":["node_modules", "build", "typings", "test"]
+	"node_modules/angular2/typings/browser.d.ts"
+	],
+    "exclude":[
+	"node_modules", 
+	"typings", 
+	"build"
+	]
     
     
 }
