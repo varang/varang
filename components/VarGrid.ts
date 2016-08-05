@@ -17,7 +17,7 @@ import {Component,
       } from "@angular/core";
 import {Http, Headers} from "@angular/http";
 import {RemotePagerParams, ClientPagerParams,DataSourceProperties} from "./core";
-
+ 
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
 // 		fff</VarGridClientPagerParams>
 
@@ -378,12 +378,19 @@ export class VarGrid{
       });
   }
 
+  xpathtoJsonProperty(json, xpath){
+    let idx = xpath.indexOf('.');
+    if (idx ==-1)
+      return json[xpath];
+    var propName = xpath.substring(0,idx);
+    return this.xpathtoJsonProperty(json[propName], xpath.substring(idx+1) );
+  }
 
-  loadRemoteData(data:any){
+  fetchRemoteData(data:any){
     let bodyString:string = JSON.parse(JSON.stringify(data))._body
-
     let griddata = JSON.parse(bodyString); 
-    let rows:any[] = griddata._embedded.persons;
+    let rows:any[] = this.xpathtoJsonProperty(griddata, this.jsonReader.params.root);
+    //let rows:any[] = griddata._embedded.persons;
     if (rows===undefined || rows.length==0)
       return;
     this.loadLocalDataOnInitializaton(rows);
@@ -404,12 +411,12 @@ export class VarGrid{
     if (this.dataSource.methodType.toUpperCase()==="POST")
       this.http.post(this.dataSource.properties.url, JSON.stringify(this.clientPagerParams.params), {headers:headers})
         .subscribe(
-          data=>this.loadRemoteData(data),
+          data=>this.fetchRemoteData(data),
           error=>console.log(error)
           );
         this.http.get(this.buildPaginationUrl(this.dataSource.properties.url), {headers:headers})
         .subscribe(
-          data=>this.loadRemoteData(data),
+          data=>this.fetchRemoteData(data),
           error=>console.log(error)
           );
   }

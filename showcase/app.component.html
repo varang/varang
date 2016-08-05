@@ -1,6 +1,7 @@
 
 
 <div class="container">
+
 <VarGrid>
 	<VarGridDataSource [methodType]="POST" [dataOrigin]="remote" 
 		[loadOnInit]="true"  [url]="url" [serverType]="rest">
@@ -11,7 +12,7 @@
 	
 	<VarGridRemotePagerParams>
 		{
-		    "root": "rows",
+		    "root": "_embedded.persons",
 		    "page": "page",
 		    "total": "total",
 		    "records": "records",
@@ -38,5 +39,7 @@
 	</VarGridRow>
 
 </VarGrid>
+
+
 
 </div>

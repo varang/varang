@@ -13,7 +13,7 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 	
 	<VarGridRemotePagerParams>
 		{
-		    "root": "rows",
+		    "root": "_embedded.persons",
 		    "page": "page",
 		    "total": "total",
 		    "records": "records",
@@ -45,6 +45,95 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 and this is the output.
 
 ![Basic apperance of VarGrid-v008] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v008-output.png "Var Grid v008 output screenshot")
+
+For the example above, the rest api provided by "http://localhost:8080/ebys/datarest/persons" produce below json structure.
+
+```javascript
+{
+  "_embedded" : {
+    "persons" : [ {
+      "id" : 1,
+      "code" : null,
+      "aciklama" : null,
+      "active" : true,
+      "version" : null,
+      "md5" : null,
+      "createTime" : "2016-06-05T13:24:36.827+0000",
+      "updateTime" : "2016-06-05T13:24:36.827+0000",
+      "firstName" : "person 0",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/ebys/datarest/persons/1"
+        },
+        "person" : {
+          "href" : "http://localhost:8080/ebys/datarest/persons/1{?projection}",
+          "templated" : true
+        }
+      }
+    }, {
+      "id" : 2,
+      "code" : null,
+      "aciklama" : null,
+      "active" : true,
+      "version" : null,
+      "md5" : null,
+      "createTime" : "2016-06-05T13:24:36.867+0000",
+      "updateTime" : "2016-06-05T13:24:36.867+0000",
+      "firstName" : "person 1",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/ebys/datarest/persons/2"
+        },
+        "person" : {
+          "href" : "http://localhost:8080/ebys/datarest/persons/2{?projection}",
+          "templated" : true
+        }
+      }
+    },
+    ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/ebys/datarest/persons?page=0&rows=10"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/ebys/datarest/persons"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/ebys/datarest/persons?page=1&rows=10"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/ebys/datarest/persons?page=46&rows=10"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/ebys/datarest/profile/persons"
+    }
+  },
+  "page" : {
+    "size" : 10,
+    "totalElements" : 461,
+    "totalPages" : 47,
+    "number" : 0
+  }
+}
+
+```
+and VarGrid becomes aware of the json structure with the configuration below
+
+```html
+	<VarGridRemotePagerParams>
+		{
+		    "root": "_embedded.persons",
+		    "page": "page.number",
+		    "total": "page.totalElements",
+		    "records": "page.totalPages",
+		    "repeatitems": false,
+		    "cell": "cell",
+		    "id": "id"
+		}
+	</VarGridRemotePagerParams>	
+```
+
 
 ### VarGrid-v008 has the functionalities below.
 

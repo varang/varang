@@ -8,7 +8,7 @@ module.exports = {
     },
     output: {
         path: __dirname,
-        filename: "./prod/[name].js"
+        filename: "./showcase/[name].js"
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
