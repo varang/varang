@@ -10,24 +10,33 @@
 		}
 	</VarGridDataSource>
 	
-	<VarGridRemotePagerParams>
+	<VarGridRemoteDataProviderMapping>
 		{
-		    "root": "_embedded.persons",
-		    "page": "page",
-		    "total": "total",
-		    "records": "records",
-		    "repeatitems": false,
-		    "cell": "cell",
-		    "id": "id"
+		    "in":{
+			    "jsonXPath":
+			    	{
+				    	"list": "_embedded.persons",
+				    	"pageSize": "page.size",
+				    	"pageIndex": "page.number",
+				    	"total": "page.totalElements"
+			    	}
+		    },
+		    "out":{
+		    	"pageStart": "page",
+		    	"pageSize": "rows",
+		    	"sortIndex":"sidx",
+		    	"sortOrder": "sord"
+		    }
 		}
-	</VarGridRemotePagerParams>		
+	</VarGridRemoteDataProviderMapping>		
 
 	<VarGridClientPagerParams>
 		{
-		    "sidx": "id",
+		    "id":"id",
+		    "sortIndex": "id",
 		    "pageSize": 10,
 		    "pageSizes": [10,30,50],
-		    "sord": "ASC",
+		    "sortOrder": "ASC",
 		    "pageStart": 0
 		}
 	</VarGridClientPagerParams>	

@@ -16,22 +16,22 @@ import {Component,
         Inject
       } from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import {RemotePagerParams, ClientPagerParams,DataSourceProperties} from "./core";
+import {RemoteDataProvider, ClientPagerParams,DataSourceProperties, RemoteProviderPagingParams,RemoteProviderRequestParamNames } from "./core";
  
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
 // 		fff</VarGridClientPagerParams>
 
 
-
 @Component({
-  selector:"VarGridRemotePagerParams",
+  selector:"VarGridRemoteDataProviderMapping",
   template:`<ng-content></ng-content>`
 })
-export class VarGridRemotePagerParams {
+export class VarGridRemoteDataProviderMapping {
   // @ViewChild(TodoInputComponent) inputComponent: TodoInputComponent
   //@ViewChild('wrapper') wrapper;
   public content:string="{}";
-  public params:RemotePagerParams;
+  public data: RemoteDataProvider = new RemoteDataProvider();
+  
  constructor(private elementRef:ElementRef) {
     this.content = this.elementRef.nativeElement.innerHTML;
   }
@@ -41,15 +41,18 @@ export class VarGridRemotePagerParams {
   // https://angular.io/docs/ts/latest/guide/lifecycle-hooks.html#!#aftercontent
     ngAfterContentInit() {
       this.content = this.elementRef.nativeElement.innerHTML;
-      let data= JSON.parse(JSON.parse(JSON.stringify(this.content)));
-      this.params = new RemotePagerParams();
-      this.params.root = data.root;
-      this.params.cell = data.cell;
-      this.params.id = data.id;
-      this.params.page= data.page;
-      this.params.records = data.records;
-      this.params.repeatitems = data.repeatitems;
-      this.params.total = data.total;
+      let json= JSON.parse(JSON.parse(JSON.stringify(this.content)));
+      //alert(JSON.stringify(json.in.));
+      this.data.in.jasonXPath.list = json.in.jsonXPath.list;
+      this.data.in.jasonXPath.pageSize = json.in.jsonXPath.pageSize;
+      this.data.in.jasonXPath.pageIndex = json.in.jsonXPath.pageIndex;
+      this.data.in.jasonXPath.total = json.in.jsonXPath.total;
+
+      this.data.out.pageSize = json.out.pageSize;
+      this.data.out.pageStart = json.out.pageStart;
+      this.data.out.sortIndex= json.out.sortIndex;
+      this.data.out.sortOrder = json.out.sortOrder;
+     
     }
   
 
@@ -62,21 +65,22 @@ export class VarGridRemotePagerParams {
 })
 export class VarGridClientPagerParams {
     public content:string="{}";
-    public params:ClientPagerParams = new ClientPagerParams();
+    public data:ClientPagerParams = new ClientPagerParams();
     
 
    constructor(private elementRef:ElementRef) {
           this.content = this.elementRef.nativeElement.innerHTML;
     }
-
+ 
     ngAfterContentInit() {
       this.content = this.elementRef.nativeElement.innerHTML;
-      let data= JSON.parse(JSON.parse(JSON.stringify(this.content)));
-      this.params.pageStart = data.pageStart;
-      this.params.sidx=data.sidx;
-      this.params.pageSize=data.pageSize
-      this.params.sord=data.sord;
-      this.params.pageSizes=data.pageSize;
+      let json = JSON.parse(JSON.parse(JSON.stringify(this.content)));      
+
+      this.data.pageSize = json.pageSize;
+      this.data.pageSizes = json.pageSizes;
+      this.data.pageStart = json.pageStart;
+      this.data.sortIndex = json.sortIndex;
+      this.data.sortOrder = json.sortOrder;
     }
   
 }
@@ -323,8 +327,8 @@ export class VarGridHeaderRowView {
 export class VarGrid{
 	// @ContentChild(VarGridRowComponent)
  //  	rowDef: VarGridRowComponent;
-	@ContentChild(VarGridRemotePagerParams)
-  jsonReader: VarGridRemotePagerParams;
+	@ContentChild(VarGridRemoteDataProviderMapping)
+  remoteDataProviderMapping: VarGridRemoteDataProviderMapping;
 	@ContentChild(VarGridClientPagerParams)
   clientPagerParams: VarGridClientPagerParams;
   @ContentChild(VarGridHeaderRowView)
@@ -337,6 +341,7 @@ export class VarGrid{
   coldefs: QueryList<VarGridColumn>;
 
 
+  private headers:VarGridHeaderColumnView[]=[];
   private rows:VarGridRowView[]=[];
 
 	constructor(private http:Http) {
@@ -389,32 +394,40 @@ export class VarGrid{
   fetchRemoteData(data:any){
     let bodyString:string = JSON.parse(JSON.stringify(data))._body
     let griddata = JSON.parse(bodyString); 
-    let rows:any[] = this.xpathtoJsonProperty(griddata, this.jsonReader.params.root);
+    let rows:any[] = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.list);
     //let rows:any[] = griddata._embedded.persons;
     if (rows===undefined || rows.length==0)
       return;
     this.loadLocalDataOnInitializaton(rows);
   }
 
-  buildPaginationUrl(url:string) {
-    return url
-          +"?page="+this.clientPagerParams.params.pageStart
-          +"&rows="+this.clientPagerParams.params.pageSize
-          +"&sidx="+this.clientPagerParams.params.sidx
-          +"&sord="+this.clientPagerParams.params.sord
-          ;
+  buildGetParams() {
+    let params = this.buildPostParams();
+    let paramstring:string="";
+    Object.keys(params).forEach((key)=>paramstring+="&"+key+"="+params[key]);
+    return "?"+paramstring.substring(1);
+  }
+
+  buildPostParams(){
+    let hash:any={};
+    hash[this.remoteDataProviderMapping.data.out.pageStart]=this.clientPagerParams.data.pageStart;
+    hash[this.remoteDataProviderMapping.data.out.pageSize]=this.clientPagerParams.data.pageSize;
+    hash[this.remoteDataProviderMapping.data.out.sortIndex]=this.clientPagerParams.data.sortIndex;
+    hash[this.remoteDataProviderMapping.data.out.sortOrder]=this.clientPagerParams.data.sortOrder;
+    return hash;
   }
 
   loadRemoteDataOnInitializaton(url:string){
     let headers = new Headers({'Content-type':'application/json'});
-
     if (this.dataSource.methodType.toUpperCase()==="POST")
-      this.http.post(this.dataSource.properties.url, JSON.stringify(this.clientPagerParams.params), {headers:headers})
+      this.http.post(this.dataSource.properties.url, 
+        JSON.stringify(this.buildPostParams()), {headers:headers})
         .subscribe(
           data=>this.fetchRemoteData(data),
           error=>console.log(error)
           );
-        this.http.get(this.buildPaginationUrl(this.dataSource.properties.url), {headers:headers})
+    else
+      this.http.get(url+this.buildGetParams(), {headers:headers})
         .subscribe(
           data=>this.fetchRemoteData(data),
           error=>console.log(error)
@@ -422,7 +435,7 @@ export class VarGrid{
   }
 
 
-  loadPage(){
+  initGrid(){
      if (this.dataSource.loadOnInit){
        if (this.dataSource.dataOrigin==="local")
          this.loadLocalDataOnInitializaton(this.dataSource.localDataSource);
@@ -432,9 +445,9 @@ export class VarGrid{
   }
 
   ngAfterContentInit(){
-      this.dataSource.dataOrigin="remote";
-      this.dataSource.methodType="POST";
-      this.loadPage();  
+    this.dataSource.methodType="GET";
+    this.dataSource.dataOrigin="remote";
+      this.initGrid();
     
   }
 
@@ -443,7 +456,7 @@ export class VarGrid{
 //// events
 
   seekToFirstPage(){
-      this.clientPagerParams.params.pageStart=0;
+      this.clientPagerParams.data.pageStart=0;
       this.seekToPage();
   }
   seekToLastPage(){
@@ -451,21 +464,21 @@ export class VarGrid{
   }
 
   seekToNextPage(){
-   this.clientPagerParams.params.pageStart=this.clientPagerParams.params.pageStart+1; 
+   this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart+1; 
    this.seekToPage();
   }
   seekToPreviousPage(){
-   this.clientPagerParams.params.pageStart=this.clientPagerParams.params.pageStart-1; 
+   this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart-1; 
    this.seekToPage();
   }
 
   seekToPage(){
-      if (this.clientPagerParams.params.pageStart==-1)
+      if (this.clientPagerParams.data.pageStart==-1)
         return;
       this.rows=null;
       this.rows=[];
       
-      this.loadPage();
+      this.initGrid();
   }
 }
 
