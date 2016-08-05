@@ -11,24 +11,33 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 		}
 	</VarGridDataSource>
 	
-	<VarGridRemotePagerParams>
+	<VarGridRemoteDataProviderMapping>
 		{
-		    "root": "_embedded.persons",
-		    "page": "page",
-		    "total": "total",
-		    "records": "records",
-		    "repeatitems": false,
-		    "cell": "cell",
-		    "id": "id"
+		    "in":{
+			    "jsonXPath":
+			    	{
+				    	"list": "_embedded.persons",
+				    	"pageSize": "page.size",
+				    	"pageIndex": "page.number",
+				    	"total": "page.totalElements"
+			    	}
+		    },
+		    "out":{
+		    	"pageStart": "page",
+		    	"pageSize": "rows",
+		    	"sortIndex":"sidx",
+		    	"sortOrder": "sord"
+		    }
 		}
-	</VarGridRemotePagerParams>		
+	</VarGridRemoteDataProviderMapping>			
 
 	<VarGridClientPagerParams>
 		{
-		    "sidx": "id",
+		    "id":"id",
+		    "sortIndex": "id",
 		    "pageSize": 10,
 		    "pageSizes": [10,30,50],
-		    "sord": "ASC",
+		    "sortOrder": "ASC",
 		    "pageStart": 0
 		}
 	</VarGridClientPagerParams>	
@@ -118,20 +127,28 @@ For the example above, the rest api provided by "http://localhost:8080/ebys/data
 }
 
 ```
-and VarGrid becomes aware of the json structure with the configuration below. VarGrid consumes the "_embedded.persons" JSON list provided above by having the configuration "root": "_embedded.persons".
+and VarGrid becomes aware of the json structure with the configuration below. VarGrid consumes the "_embedded.persons" JSON list provided above by having the configuration "list": "_embedded.persons".
 
 ```html
-	<VarGridRemotePagerParams>
+	<VarGridRemoteDataProviderMapping>
 		{
-		    "root": "_embedded.persons",
-		    "page": "page.number",
-		    "total": "page.totalElements",
-		    "records": "page.totalPages",
-		    "repeatitems": false,
-		    "cell": "cell",
-		    "id": "id"
+		    "in":{
+			    "jsonXPath":
+			    	{
+				    	"list": "_embedded.persons",
+				    	"pageSize": "page.size",
+				    	"pageIndex": "page.number",
+				    	"total": "page.totalElements"
+			    	}
+		    },
+		    "out":{
+		    	"pageStart": "page",
+		    	"pageSize": "rows",
+		    	"sortIndex":"sidx",
+		    	"sortOrder": "sord"
+		    }
 		}
-	</VarGridRemotePagerParams>	
+	</VarGridRemoteDataProviderMapping>			
 ```
 
 
