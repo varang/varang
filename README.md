@@ -118,7 +118,7 @@ For the example above, the rest api provided by "http://localhost:8080/ebys/data
 }
 
 ```
-and VarGrid becomes aware of the json structure with the configuration below
+and VarGrid becomes aware of the json structure with the configuration below. VarGrid consumes the "_embedded.persons" JSON list provided above by having the configuration "root": "_embedded.persons".
 
 ```html
 	<VarGridRemotePagerParams>
