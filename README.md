@@ -46,7 +46,7 @@ and this is the output.
 
 ![Basic apperance of VarGrid-v008] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v008-output.png "Var Grid v008 output screenshot")
 
-For the example above, the rest api provided by "http://localhost:8080/ebys/datarest/persons" produce below json structure.
+For the example above, the rest api provided by "http://localhost:8080/ebys/datarest/persons" produces json structure below.
 
 ```javascript
 {
