@@ -162,6 +162,7 @@ VarGrid;
 4. supports ajax based pagination
 5. is configurable for different json formats of varying data source. 
 6. Sorting
+7. Spring Data Rest integration
 
 
 ### Next to do
