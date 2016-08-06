@@ -152,7 +152,7 @@ and VarGrid becomes aware of the json structure with the configuration below. Va
 ```
 
 
-### VarGrid-v008 has the functionalities below.
+### VarGrid-v0.2.0 has the functionalities below.
 
 VarGrid;
 
