@@ -161,11 +161,23 @@ VarGrid;
 3. supports local (static) and remote (ajax) data sources.
 4. supports ajax based pagination
 5. is configurable for different json formats of varying data source. 
+6. Sorting
+
 
 ### Next to do
 
-1. Headers will be implemented.
-2. Sorting
-3. Page size combobox.
-4. Checkboxed rows
-5. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
+
+1. Page size combobox.
+2. Checkboxed rows
+3. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
+4. Search dialog
+5. Search toolbar
+6. Drag and drop columns
+7. Footer buttons
+8. Pdf and excel export drivers.
+9. Column grouping
+10. Button cells
+11. Subgrid
+12. UI enhancement
+13. Adaptable css templates
+14. Editable row
