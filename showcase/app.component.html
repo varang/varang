@@ -4,7 +4,7 @@
 
 <VarGrid>
 	<VarGridDataSource [methodType]="POST" [dataOrigin]="remote" 
-		[loadOnInit]="true"  [url]="url" [serverType]="rest">
+		[loadOnInit]="true"  [url]="url" [serverType]="spring-datarest">
 		{
 		"url":"http://localhost:8080/ebys/datarest/persons"
 		}
@@ -25,7 +25,7 @@
 		    	"pageStart": "page",
 		    	"pageSize": "rows",
 		    	"sortIndex":"sidx",
-		    	"sortOrder": "sord"
+		    	"sortOrder": "sort"
 		    }
 		}
 	</VarGridRemoteDataProviderMapping>		

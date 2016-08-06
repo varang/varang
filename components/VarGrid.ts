@@ -16,7 +16,13 @@ import {Component,
         Inject
       } from "@angular/core";
 import {Http, Headers} from "@angular/http";
-import {RemoteDataProvider, ClientPagerParams,DataSourceProperties, RemoteProviderPagingParams,RemoteProviderRequestParamNames } from "./core";
+import {RemoteDataProvider, 
+        ClientPagerParams,
+        DataSourceProperties, 
+        RemoteProviderPagingParams,
+        RemoteProviderRequestParamNames,
+        VarGridHeaderAction 
+      } from "./core";
  
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
 // 		fff</VarGridClientPagerParams>
@@ -225,9 +231,9 @@ export class VarGridDataSource {
 }
 
 
-@Directive({
-  selector:"[VarGridHeaderColumnView]"
-  //template:`{{content}}`
+@Component({
+  selector:"[VarGridHeaderColumnView]",
+  template:`<ng-content></ng-content>`
 })
 export class VarGridHeaderColumnView {
 
@@ -246,13 +252,13 @@ export class VarGridHeaderColumnView {
   //         //alert("headerColumnview:content:"+this.content);
   //   }
 
-    constructor(private elementRef:ElementRef) {
-          //this.content = this.elementRef.nativeElement.innerHTML;
-    }
+    // constructor(private elementRef:ElementRef) {
+    //       //this.content = this.elementRef.nativeElement.innerHTML;
+    // }
 
 
   ngAfterContentInit(){
-    this.content = this.elementRef.nativeElement.innerHTML;
+    //this.content = this.elementRef.nativeElement.innerHTML;
     //alert("content"+this.elementRef.nativeElement.innerHTML);
       // console.log(this.input);
       //alert("vargridrow-aftercontentchecked");
@@ -286,7 +292,11 @@ export class VarGridHeaderRowView {
   
 }
 
-
+//<th VarGridHeaderColumnView>Header1</th>
+  //        <th VarGridHeaderColumnView>Header2</th>
+    //      <th VarGridHeaderColumnView>Header3</th>
+          
+//[class.up]="headerActions['{{header.label}}'].toggle===true"
 
 @Component({
 	selector:"VarGrid",
@@ -296,12 +306,11 @@ export class VarGridHeaderRowView {
 	template:`
     <table class="ui celled table">
       <thead>
-        <!--tr VarGridHeaderRowView>  
-          <th VarGridHeaderColumnView>Header1</th>
-          <th VarGridHeaderColumnView>Header2</th>
-          <th VarGridHeaderColumnView>Header3</th>
-          <th VarGridHeaderColumnView>Header4</th>
-         </tr-->
+        <tr>  
+          <th VarGridHeaderColumnView  *ngFor="let header of headers">
+            <span (click)="onHeaderClicked($event, header.label)"><span>{{header.label}}</span><i  class="angle icon" [class.up]="headerActions[header.label].toggle===true" [class.down]="headerActions[header.label].toggle===false" ></i></span>
+           </th>
+         </tr>
           
        </thead>
        <tbody >
@@ -332,7 +341,7 @@ export class VarGrid{
 	@ContentChild(VarGridClientPagerParams)
   clientPagerParams: VarGridClientPagerParams;
   @ContentChild(VarGridHeaderRowView)
-  headerColumns: VarGridHeaderRowView;
+  headerRow: VarGridHeaderRowView;
   @ContentChild(VarGridDataSource)
   dataSource: VarGridDataSource;
   @ContentChild(VarGridRow)
@@ -340,9 +349,9 @@ export class VarGrid{
   @ContentChildren(VarGridColumn)
   coldefs: QueryList<VarGridColumn>;
 
-
-  private headers:VarGridHeaderColumnView[]=[];
-  private rows:VarGridRowView[]=[];
+  public headers:VarGridHeaderColumnView[]= [];
+  public rows:VarGridRowView[]=[];
+  private headerActions: { [label: string] : VarGridHeaderAction } = {};
 
 	constructor(private http:Http) {
 	}
@@ -391,7 +400,7 @@ export class VarGrid{
     return this.xpathtoJsonProperty(json[propName], xpath.substring(idx+1) );
   }
 
-  fetchRemoteData(data:any){
+  loadRemoteData(data:any){
     let bodyString:string = JSON.parse(JSON.stringify(data))._body
     let griddata = JSON.parse(bodyString); 
     let rows:any[] = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.list);
@@ -405,6 +414,7 @@ export class VarGrid{
     let params = this.buildPostParams();
     let paramstring:string="";
     Object.keys(params).forEach((key)=>paramstring+="&"+key+"="+params[key]);
+
     return "?"+paramstring.substring(1);
   }
 
@@ -414,44 +424,77 @@ export class VarGrid{
     hash[this.remoteDataProviderMapping.data.out.pageSize]=this.clientPagerParams.data.pageSize;
     hash[this.remoteDataProviderMapping.data.out.sortIndex]=this.clientPagerParams.data.sortIndex;
     hash[this.remoteDataProviderMapping.data.out.sortOrder]=this.clientPagerParams.data.sortOrder;
+    if (this.dataSource.serverType==="spring-datarest"){
+       hash[this.remoteDataProviderMapping.data.out.sortOrder] = new SpringDataDriver().buildGridSortOrder(this);
+    }
     return hash;
   }
 
-  loadRemoteDataOnInitializaton(url:string){
+  fetchRemoteDataOnInitializaton(url:string){
     let headers = new Headers({'Content-type':'application/json'});
     if (this.dataSource.methodType.toUpperCase()==="POST")
       this.http.post(this.dataSource.properties.url, 
         JSON.stringify(this.buildPostParams()), {headers:headers})
         .subscribe(
-          data=>this.fetchRemoteData(data),
+          data=>this.loadRemoteData(data),
           error=>console.log(error)
           );
     else
       this.http.get(url+this.buildGetParams(), {headers:headers})
         .subscribe(
-          data=>this.fetchRemoteData(data),
+          data=>this.loadRemoteData(data),
           error=>console.log(error)
           );
   }
 
+  
+  loadHeaders(){
+    this.rowdef.coldefs.forEach((declaredColumn)=>{
+      let col = new VarGridHeaderColumnView();
+      col.content = declaredColumn.label;
+      col.label = declaredColumn.label;
+      col.name = declaredColumn.name;
+      this.headerActions[col.label] = new VarGridHeaderAction(col.name, this.clientPagerParams.data.sortOrder==="ASC"?true:false);
+      this.headers.push(col);
+    });
+    
+  }
 
   initGrid(){
+
      if (this.dataSource.loadOnInit){
+       this.loadHeaders();
        if (this.dataSource.dataOrigin==="local")
          this.loadLocalDataOnInitializaton(this.dataSource.localDataSource);
        else if (this.dataSource.dataOrigin==="remote")
-         this.loadRemoteDataOnInitializaton(this.dataSource.properties.url);
+         this.fetchRemoteDataOnInitializaton(this.dataSource.properties.url);
      }
+  }
+
+
+  reloadGrid(){
+     this.clearGrid();
+     this.initGrid();
   }
 
   ngAfterContentInit(){
     this.dataSource.methodType="GET";
     this.dataSource.dataOrigin="remote";
-      this.initGrid();
+    this.dataSource.serverType="spring-datarest";
+    this.initGrid();
     
   }
 
+////methods
+  clearGrid(){
+    this.rows=null;
+    this.rows=[];
+    this.headers=null;
+    this.headers=[];
+    // this.headerActions = null;
+    // this.headerActions = {};
 
+  }
 
 //// events
 
@@ -475,12 +518,33 @@ export class VarGrid{
   seekToPage(){
       if (this.clientPagerParams.data.pageStart==-1)
         return;
-      this.rows=null;
-      this.rows=[];
-      
-      this.initGrid();
+      this.reloadGrid();
+  }
+
+  onHeaderClicked(event, name){
+      this.headerActions[name].enabled=true;
+      this.headerActions[name].toggle = !this.headerActions[name].toggle;
+      this.clientPagerParams.data.sortOrder = this.headerActions[name].sord();
+      this.clientPagerParams.data.sortIndex = name;
+      this.reloadGrid();   
   }
 }
 
 
+
+export class SpringDataDriver{
+  buildGridSortOrder(obj:VarGrid){
+    return obj.clientPagerParams.data.sortIndex+","+ obj.clientPagerParams.data.sortOrder.toLowerCase();
+      //,headerActions:{ [label: string] : VarGridHeaderAction
+      //let param:string="";
+      // for (var label in headerActions){
+      //     let ha:VarGridHeaderAction= headerActions[label];
+      //     if (ha.enabled) 
+      //       param+="&"+"sort="+ha.name + "," + ha.sord().toLowerCase();
+      // }
+      // if (param.length>0)
+      //   return param.substring(1);
+      // return "";
+  }
+}
 

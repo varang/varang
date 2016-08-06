@@ -38,7 +38,20 @@ export class DataSourceProperties {
 }
 
 
+export class VarGridHeaderAction {
+  public toggle:boolean;
+  public enabled:boolean;
+  public name:string;
+  constructor(name:string, toggle:boolean){
+    this.toggle = toggle;
+    this.name = name;
+    this.enabled=false;
+  }
 
+  sord(){
+    return this.toggle?"ASC":"DESC";
+  }
+}
 
 
 // export interface RemoteProviderPagingParams {
