@@ -156,7 +156,7 @@ and VarGrid becomes aware of the json structure with the configuration below. Va
 
 VarGrid;
 
-1. is built on semantic-ui css framework.
+1. is built on bootstap css framework.
 2. supports configurable GET and POST methods
 3. supports local (static) and remote (ajax) data sources.
 4. supports ajax based pagination
@@ -167,18 +167,16 @@ VarGrid;
 
 ### Next to do
 
-
-1. Page size combobox.
-2. Checkboxed rows
-3. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
-4. Search dialog
-5. Search toolbar
-6. Drag and drop columns
-7. Footer buttons
-8. Pdf and excel export drivers.
-9. Column grouping
-10. Button cells
-11. Subgrid
-12. UI enhancement
-13. Adaptable css templates
+1. Checkboxed rows
+2. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
+3. Search dialog
+4. Search toolbar
+5. Drag and drop columns
+6. Footer buttons
+7. Pdf and excel export drivers.
+8. Column grouping
+9. Button cells
+10. Subgrid
+11. UI enhancement
+12. Adaptable css templates
 14. Editable row
