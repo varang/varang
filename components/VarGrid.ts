@@ -304,7 +304,7 @@ export class VarGridHeaderRowView {
 	directives:[VarGridHeaderRowView,VarGridHeaderColumnView,VarGridRowView,VarGridColumnView, VarGridDataSource],
 
 	template:`
-    <table class="ui celled table">
+    <table class="table table-striped table-bordered" cellspacing="0" width="100%">
       <thead>
         <tr>  
           <th VarGridHeaderColumnView  *ngFor="let header of headers">
@@ -321,12 +321,22 @@ export class VarGridHeaderRowView {
        </tbody>
        <tfoot>
           <tr><th colspan="3">
-          <div class="ui right floated pagination menu">
+          <!--div class="ui right floated pagination menu">
             <a class="icon item" (click)="seekToFirstPage()"><i class="angle double left icon" ></i></a>
             <a class="icon item" (click)="seekToPreviousPage()"><i class="angle left icon" ></i></a>
             <a class="icon item" (click)="seekToNextPage()"><i class="angle right  icon" ></i></a>
             <a class="icon item" (click)="seekToLastPage()"><i class="angle double right icon" ></i></a>
-          </div>
+          </div-->
+         <ul class = "pagination">
+           <li  class="glyphicon glyphicon-fast-backward" (click)="seekToFirstPage()" ></li>
+           <li class="glyphicon glyphicon-triangle-left" (click)="seekToPreviousPage()"></li>
+           <li > <input value="{{clientPagerParams.data.pageStart+1}}" style="width:40px;text-align: right;"/> / {{remoteDataProviderMapping.data.in.pageCount}} </li>
+           
+           <li class="glyphicon glyphicon-triangle-right" (click)="seekToNextPage()"></li>
+           <li class="glyphicon glyphicon-fast-forward" (click)="seekToLastPage()"></li>
+           <li > <select (change)="onChangePageSize($event)"  ><option *ngFor="let op of clientPagerParams.data.pageSizes" >{{op}}</option> </select></li>
+           
+        </ul>
           </th>
           </tr>
         </tfoot>
@@ -390,6 +400,7 @@ export class VarGrid{
          cols.forEach((col)=>newrow.cells.push(col));
          this.rows.push(newrow);
       });
+    
   }
 
   xpathtoJsonProperty(json, xpath){
@@ -404,6 +415,10 @@ export class VarGrid{
     let bodyString:string = JSON.parse(JSON.stringify(data))._body
     let griddata = JSON.parse(bodyString); 
     let rows:any[] = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.list);
+    let total:number = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.total);
+    this.remoteDataProviderMapping.data.in.total = total;
+    this.remoteDataProviderMapping.data.in.pageCount =  Math.ceil(total / this.clientPagerParams.data.pageSize);
+
     //let rows:any[] = griddata._embedded.persons;
     if (rows===undefined || rows.length==0)
       return;
@@ -498,19 +513,30 @@ export class VarGrid{
 
 //// events
 
+  onChangePageSize($event){
+    this.clientPagerParams.data.pageSize =  $event.target.value;
+    this.reloadGrid();
+  }
+
   seekToFirstPage(){
       this.clientPagerParams.data.pageStart=0;
       this.seekToPage();
   }
   seekToLastPage(){
+    this.clientPagerParams.data.pageStart=this.remoteDataProviderMapping.data.in.pageCount-1;
+
     this.seekToPage();
   }
 
   seekToNextPage(){
+    if ( (this.clientPagerParams.data.pageStart+1)>(this.remoteDataProviderMapping.data.in.pageCount-1))
+      return;
    this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart+1; 
    this.seekToPage();
   }
   seekToPreviousPage(){
+    if ( (this.clientPagerParams.data.pageStart-1)<0)
+      return;
    this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart-1; 
    this.seekToPage();
   }

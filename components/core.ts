@@ -14,6 +14,9 @@ export class RemoteProviderRequestParamNames {
 }
 export class RemoteDataProviderIn {
   jasonXPath:RemoteProviderPagingParams = new RemoteProviderPagingParams();
+  total:number;
+  pageCount:number;
+  
 }
 
 export class RemoteDataProvider {
