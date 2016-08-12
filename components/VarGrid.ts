@@ -103,6 +103,7 @@ export class VarGridColumn {
   @Input() name:string;
   @Input() searchOptions:string;
   @Input() styleClass:string;
+  @Input() type:string="regular";
 
   ngAfterContentInit() {
       // console.log(this.input);
@@ -119,19 +120,26 @@ export class VarGridColumn {
 })
 export class VarGridColumnView {
 
-  @Input() label:string;
-  @Input() name:string;
-  @Input() searchOptions:string;
-  @Input() styleClass:string;
-
+  @Input() type:string="regular";
+  @Input() label:string="";
+  @Input() name:string="";
+  @Input() searchOptions:string="";
+  @Input() styleClass:string="";
+  @Input() checked:boolean=false;
+  
   public content:string="cell__1";
-    // constructor(private elementRef:ElementRef) {
-    // }
-
-
-  // ngAfterContentInit(){
-  //   this.content = this.elementRef.nativeElement.innerHTML;
+    
+  // constructor(private elementRef:ElementRef) {
+  //   if (this.type==='checkbox')
+  //     this.content="check";
   // }
+
+
+  ngAfterContentInit(){
+    //this.content = this.elementRef.nativeElement.innerHTML;
+   if (this.type==='checkbox')
+      this.content="check"; 
+  }
   
 }
 
@@ -174,10 +182,13 @@ export class VarGridRow {
 })
 export class VarGridRowView {
 
+
   @ContentChildren(VarGridColumnView)
   columns: QueryList<VarGridColumnView>;
   cells:VarGridColumnView[]=[];
-  
+  @Input() checked:boolean;
+  type:string="regular";
+
   constructor() {
     // this.cells.push(new VarGridColumnView());
     // this.cells.push(new VarGridColumnView());
@@ -221,6 +232,7 @@ export class VarGridDataSource {
 
    constructor(private elementRef:ElementRef) {
           this.content = this.elementRef.nativeElement.innerHTML;
+
     }
 
     ngAfterContentInit() {
@@ -237,10 +249,11 @@ export class VarGridDataSource {
 })
 export class VarGridHeaderColumnView {
 
-  @Input() label:string;
-  @Input() name:string;
-  @Input() searchOptions:string;
-  @Input() styleClass:string;
+  @Input() label:string="";
+  @Input() name:string="";
+  @Input() searchOptions:string="";
+  @Input() styleClass:string="";
+  @Input() type:string="regular";
 
    public content:string;
   //   constructor(@Inject(ElementRef) element: ElementRef) {
@@ -307,20 +320,26 @@ export class VarGridHeaderRowView {
     <table class="table table-striped table-bordered" cellspacing="0" width="100%">
       <thead>
         <tr>  
-          <th VarGridHeaderColumnView  *ngFor="let header of headers">
-            <span (click)="onHeaderClicked($event, header.label)"><span>{{header.label}}</span><i  class="angle icon" [class.up]="headerActions[header.label].toggle===true" [class.down]="headerActions[header.label].toggle===false" ></i></span>
+          
+
+          <th VarGridHeaderColumnView  *ngFor="let header of headers" >
+            <span *ngIf="header.type==='checkbox'"> <input type="checkbox" (click)="onHeaderCheckboxChecked($event, header.name)"/></span>
+            <span *ngIf="header.type==='regular'" (click)="onHeaderClicked($event, header.name)"><span>{{header.label}}</span><i  class="angle icon" [class.up]="headerActions[header.label].toggle===true" [class.down]="headerActions[header.label].toggle===false" ></i></span>
            </th>
          </tr>
           
        </thead>
        <tbody >
-
-        <tr VarGridRowView  *ngFor="let row of rows">
-            <td VarGridColumnView *ngFor="let cell of row.cells">{{cell.content}}</td>
+         <ng-content select="VarGridRowView"></ng-content>
+        <tr VarGridRowView  *ngFor="let row of rows; let i=index">
+            <td VarGridColumnView *ngFor="let cell of row.cells">
+            <span *ngIf="cell.type==='regular'">{{cell.content}}</span>
+            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (click)="onRowCheckboxChecked(event$, cell.name, i)" />
+            </td>
         </tr>
        </tbody>
        <tfoot>
-          <tr><th colspan="3">
+          <tr><th [attr.colspan]="headers.length">
           <!--div class="ui right floated pagination menu">
             <a class="icon item" (click)="seekToFirstPage()"><i class="angle double left icon" ></i></a>
             <a class="icon item" (click)="seekToPreviousPage()"><i class="angle left icon" ></i></a>
@@ -358,10 +377,13 @@ export class VarGrid{
   rowdef: VarGridRow;
   @ContentChildren(VarGridColumn)
   coldefs: QueryList<VarGridColumn>;
+  
 
   public headers:VarGridHeaderColumnView[]= [];
   public rows:VarGridRowView[]=[];
   private headerActions: { [label: string] : VarGridHeaderAction } = {};
+  public data:any[];
+  public checkedRows:number[]=[];
 
 	constructor(private http:Http) {
 	}
@@ -372,6 +394,7 @@ export class VarGrid{
       let col = new VarGridColumnView();
       col.name=declaredColumn.name;
       col.label = declaredColumn.label;
+      col.type=declaredColumn.type;
       col.searchOptions = declaredColumn.searchOptions;
       col.styleClass = declaredColumn.styleClass;
       cols.push(col);
@@ -385,11 +408,12 @@ export class VarGrid{
       return -1;
   }
 
-  loadLocalDataOnInitializaton(data:any[]){
-    if (data===undefined || data.length==0)
+  loadLocalDataOnInitializaton(){
+    if (this.data===undefined || this.data.length==0)
       return;
     //TODO, apply mapping of a best practice
-    data.forEach((row)=>{
+    let newrows:VarGridRowView[] =[];
+    this.data.forEach((row)=>{
           let newrow = new VarGridRowView();
           let cols:VarGridColumnView[] = this.copyColumnView(this.rowdef.coldefs);
           Object.keys(row).forEach((key)=>{
@@ -398,8 +422,11 @@ export class VarGrid{
             cols[idx].content = row[key];
          });
          cols.forEach((col)=>newrow.cells.push(col));
-         this.rows.push(newrow);
+         newrows.push(newrow);
       });
+
+    this.rows=null;
+    this.rows=newrows;
     
   }
 
@@ -411,18 +438,18 @@ export class VarGrid{
     return this.xpathtoJsonProperty(json[propName], xpath.substring(idx+1) );
   }
 
-  loadRemoteData(data:any){
-    let bodyString:string = JSON.parse(JSON.stringify(data))._body
+  mapRemoteData(remotedata:any){
+    let bodyString:string = JSON.parse(JSON.stringify(remotedata))._body
     let griddata = JSON.parse(bodyString); 
-    let rows:any[] = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.list);
+    this.data = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.list);
     let total:number = this.xpathtoJsonProperty(griddata, this.remoteDataProviderMapping.data.in.jasonXPath.total);
     this.remoteDataProviderMapping.data.in.total = total;
     this.remoteDataProviderMapping.data.in.pageCount =  Math.ceil(total / this.clientPagerParams.data.pageSize);
 
     //let rows:any[] = griddata._embedded.persons;
-    if (rows===undefined || rows.length==0)
+    if (this.data===undefined || this.data.length==0)
       return;
-    this.loadLocalDataOnInitializaton(rows);
+    this.loadLocalDataOnInitializaton();
   }
 
   buildGetParams() {
@@ -445,19 +472,19 @@ export class VarGrid{
     return hash;
   }
 
-  fetchRemoteDataOnInitializaton(url:string){
+  fetchRemoteDataOnInitializaton(){
     let headers = new Headers({'Content-type':'application/json'});
     if (this.dataSource.methodType.toUpperCase()==="POST")
       this.http.post(this.dataSource.properties.url, 
         JSON.stringify(this.buildPostParams()), {headers:headers})
         .subscribe(
-          data=>this.loadRemoteData(data),
+          data=>this.mapRemoteData(data),
           error=>console.log(error)
           );
     else
-      this.http.get(url+this.buildGetParams(), {headers:headers})
+      this.http.get(this.dataSource.properties.url+this.buildGetParams(), {headers:headers})
         .subscribe(
-          data=>this.loadRemoteData(data),
+          data=>this.mapRemoteData(data),
           error=>console.log(error)
           );
   }
@@ -469,43 +496,43 @@ export class VarGrid{
       col.content = declaredColumn.label;
       col.label = declaredColumn.label;
       col.name = declaredColumn.name;
+      col.type = declaredColumn.type;
       this.headerActions[col.label] = new VarGridHeaderAction(col.name, this.clientPagerParams.data.sortOrder==="ASC"?true:false);
       this.headers.push(col);
     });
     
   }
 
+  loadData(){
+       if (this.dataSource.dataOrigin==="local")
+         this.loadLocalDataOnInitializaton();
+       else if (this.dataSource.dataOrigin==="remote")
+         this.fetchRemoteDataOnInitializaton();
+    
+  }
   initGrid(){
 
      if (this.dataSource.loadOnInit){
        this.loadHeaders();
-       if (this.dataSource.dataOrigin==="local")
-         this.loadLocalDataOnInitializaton(this.dataSource.localDataSource);
-       else if (this.dataSource.dataOrigin==="remote")
-         this.fetchRemoteDataOnInitializaton(this.dataSource.properties.url);
+       this.loadData();
      }
   }
 
 
   reloadGrid(){
-     this.clearGrid();
-     this.initGrid();
+     this.loadData();
   }
 
   ngAfterContentInit(){
-    this.dataSource.methodType="GET";
-    this.dataSource.dataOrigin="remote";
-    this.dataSource.serverType="spring-datarest";
     this.initGrid();
-    
   }
 
 ////methods
   clearGrid(){
     this.rows=null;
     this.rows=[];
-    this.headers=null;
-    this.headers=[];
+    // this.headers=null;
+    // this.headers=[];
     // this.headerActions = null;
     // this.headerActions = {};
 
@@ -554,6 +581,37 @@ export class VarGrid{
       this.clientPagerParams.data.sortIndex = name;
       this.reloadGrid();   
   }
+
+  onHeaderCheckboxChecked($event, name:string) {
+      //alert($event.target.checked);
+      this.checkedRows = null;
+      this.checkedRows = [];
+      
+      for (let i=0;i<this.rows.length;i++) {
+        let row = this.rows[i];
+        for (let j=0;j<row.cells.length;j++){
+          let cell = row.cells[j];
+          if (cell.name===name)
+            cell.checked=$event.target.checked;
+
+        }
+        if ($event.target.checked) {
+          this.checkedRows.push(this.data[i].id);
+        }
+      
+      }
+      
+  }
+  
+  onRowCheckboxChecked($event, name:string, idx:number) {
+      //alert(cells[2].content);
+      //alert(idx);
+      //this.checkedRows.push(this.data[idx].id);
+      this.checkedRows.push(this.data[idx].id);
+      
+  }
+
+  
 }
 
 

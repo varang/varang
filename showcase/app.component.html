@@ -56,8 +56,8 @@
 <div >
 
 <VarGrid>
-	<VarGridDataSource [methodType]="POST" [dataOrigin]="remote" 
-		[loadOnInit]="true"  [url]="url" [serverType]="spring-datarest">
+	<VarGridDataSource methodType="GET" dataOrigin="remote" 
+		[loadOnInit]="true"  url="url" serverType="spring-datarest">
 		{
 		"url":"http://localhost:8080/ebys/datarest/persons"
 		}
@@ -95,6 +95,7 @@
 	</VarGridClientPagerParams>	
 
 	<VarGridRow>
+    <VarGridColumn styleClass="grid_checkbox" type="checkbox" ></VarGridColumn>
 		<VarGridColumn label="id" name="id" styleClass="grid_id" ></VarGridColumn>
 		<VarGridColumn label="name" name="name" styleClass="grid_name" ></VarGridColumn>
 		<VarGridColumn label="firstName" name="firstName" styleClass="grid_firstName" ></VarGridColumn>
