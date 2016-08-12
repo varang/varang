@@ -4,8 +4,8 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 
 ```html
 <VarGrid>
-	<VarGridDataSource [methodType]="POST" [dataOrigin]="remote" 
-		[loadOnInit]="true"  [url]="url" [serverType]="rest">
+	<VarGridDataSource methodType="POST" dataOrigin="remote" 
+		loadOnInit="true"  url="url" serverType="rest">
 		{
 		"url":"http://localhost:8080/ebys/datarest/persons"
 		}
@@ -43,6 +43,7 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 	</VarGridClientPagerParams>	
 
 	<VarGridRow>
+		<VarGridColumn label="checkbox"  styleClass="grid_checkbox" type="checkbox"></VarGridColumn>
 		<VarGridColumn label="id" name="id" styleClass="grid_id" ></VarGridColumn>
 		<VarGridColumn label="name" name="name" styleClass="grid_name" ></VarGridColumn>
 		<VarGridColumn label="firstName" name="firstName" styleClass="grid_firstName" ></VarGridColumn>
@@ -53,7 +54,7 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 
 and this is the output.
 
-![Basic apperance of VarGrid-v008] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v0.2.0-output.png "Var Grid v0.2.0 output screenshot")
+![Basic apperance of VarGrid-v022] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v0.2.2-output.png "Var Grid v0.2.2 output screenshot")
 
 For the example above, the rest api provided by "http://localhost:8080/ebys/datarest/persons" produces json structure below.
 
@@ -163,20 +164,20 @@ VarGrid;
 5. is configurable for different json formats of varying data source. 
 6. Sorting
 7. Spring Data Rest integration
+8. Checkboxed rows
 
 
 ### Next to do
 
-1. Checkboxed rows
-2. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
-3. Search dialog
-4. Search toolbar
-5. Drag and drop columns
-6. Footer buttons
-7. Pdf and excel export drivers.
-8. Column grouping
-9. Button cells
-10. Subgrid
-11. UI enhancement
-12. Adaptable css templates
-14. Editable row
+1. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
+2. Search dialog
+3. Search toolbar
+4. Drag and drop columns
+5. Footer buttons
+6. Pdf and excel export drivers.
+7. Column grouping
+8. Button cells
+9. Subgrid
+10. UI enhancement
+11. Adaptable css templates
+12. Editable row
