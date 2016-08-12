@@ -323,7 +323,7 @@ export class VarGridHeaderRowView {
           
 
           <th VarGridHeaderColumnView  *ngFor="let header of headers" >
-            <span *ngIf="header.type==='checkbox'"> <input type="checkbox" (click)="onHeaderCheckboxChecked($event, header.name)"/></span>
+            <span *ngIf="header.type==='checkbox'"> <input type="checkbox" (click)="onHeaderCheckboxChecked($event, header.label)"/></span>
             <span *ngIf="header.type==='regular'" (click)="onHeaderClicked($event, header.name)"><span>{{header.label}}</span><i  class="angle icon" [class.up]="headerActions[header.label].toggle===true" [class.down]="headerActions[header.label].toggle===false" ></i></span>
            </th>
          </tr>
@@ -334,7 +334,7 @@ export class VarGridHeaderRowView {
         <tr VarGridRowView  *ngFor="let row of rows; let i=index">
             <td VarGridColumnView *ngFor="let cell of row.cells">
             <span *ngIf="cell.type==='regular'">{{cell.content}}</span>
-            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (click)="onRowCheckboxChecked(event$, cell.name, i)" />
+            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (click)="onRowCheckboxChecked($event, cell.label, i)" />
             </td>
         </tr>
        </tbody>
@@ -383,7 +383,7 @@ export class VarGrid{
   public rows:VarGridRowView[]=[];
   private headerActions: { [label: string] : VarGridHeaderAction } = {};
   public data:any[];
-  public checkedRows:number[]=[];
+  public checkedRows:Map<string,Map<number, boolean>> = new Map<string,Map<number, boolean>>();
 
 	constructor(private http:Http) {
 	}
@@ -421,7 +421,16 @@ export class VarGrid{
           if (idx!=-1)
             cols[idx].content = row[key];
          });
-         cols.forEach((col)=>newrow.cells.push(col));
+         cols.forEach((col)=>{
+            if (col.label==="checkbox"){
+              if (this.checkedRows.get("checkbox")===undefined)
+                this.checkedRows.set("checkbox", new Map<number,boolean>());
+              if (this.checkedRows.get("checkbox").get(row["id"])!==undefined)
+                col.checked=true;
+            }  
+              
+            newrow.cells.push(col);
+         });
          newrows.push(newrow);
       });
 
@@ -571,6 +580,7 @@ export class VarGrid{
   seekToPage(){
       if (this.clientPagerParams.data.pageStart==-1)
         return;
+
       this.reloadGrid();
   }
 
@@ -582,36 +592,29 @@ export class VarGrid{
       this.reloadGrid();   
   }
 
-  onHeaderCheckboxChecked($event, name:string) {
-      //alert($event.target.checked);
-      this.checkedRows = null;
-      this.checkedRows = [];
-      
+  onHeaderCheckboxChecked($event, label:string) {
+      this.checkedRows.clear();
+      this.checkedRows.set(label, new Map<number,boolean>());
       for (let i=0;i<this.rows.length;i++) {
-        let row = this.rows[i];
-        for (let j=0;j<row.cells.length;j++){
-          let cell = row.cells[j];
-          if (cell.name===name)
+        this.rows[i].cells.forEach((cell) => {
+          if (cell.label===label)
             cell.checked=$event.target.checked;
-
-        }
-        if ($event.target.checked) {
-          this.checkedRows.push(this.data[i].id);
-        }
-      
+        });
+        if ($event.target.checked)
+          this.checkedRows.get(label).set(this.data[i].id, true);
       }
-      
   }
   
-  onRowCheckboxChecked($event, name:string, idx:number) {
-      //alert(cells[2].content);
-      //alert(idx);
-      //this.checkedRows.push(this.data[idx].id);
-      this.checkedRows.push(this.data[idx].id);
-      
-  }
+  onRowCheckboxChecked($event, label:string, idx:number) {
+    //alert($event.target.checked);
+    alert(label+":"+this.data[idx].id);
 
-  
+    if ($event.target.value)
+      this.checkedRows.get(label).set(this.data[idx].id, true);
+    else
+      this.checkedRows.get(label).delete(this.data[idx].id);
+
+  }
 }
 
 
