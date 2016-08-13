@@ -1,6 +1,6 @@
 # VarAng UI Components
 
-VarAng is a UI components library based on Angular 2. At the moment VarGrid (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang). Here is the syntax.
+VarAng is a UI components library based on Angular 2. At the moment VarGrid (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang) and source code from [here](https://github.com/varang/varang). There is a Spring Data Rest implementation in [this](https://github.com/varang/varang) address. Here is the syntax.
 
 ```html
 <VarGrid>
