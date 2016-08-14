@@ -47,14 +47,29 @@ export class VarangEvent {
     target:any;
     value:any;    
     intercept:VarangInterceptor=VarangInterceptor.Before; //before, after
+
+    constructor(s:any,t:any,v:any,i:VarangInterceptor){
+      this.source = s;
+      this.target = t;
+      this.value = v;
+      this.intercept = i;
+   }   
+
 }
 
 export class VarGridEvent extends VarangEvent {
-    
-}
+  constructor(s:any,t:any,v:any,i:VarangInterceptor){
+    super(s,t,v,i);
+   } 
+}   
 
 export class VarGridRowSelectedEvent extends VarGridEvent {
     rowId:number;
+    constructor(s:any,t:any,v:any,i:VarangInterceptor, rowId:number) {
+       super(s,t,v,i);   
+       this.rowId = rowId;
+     }   
+
 }
 
 

@@ -24,7 +24,8 @@ import {RemoteDataProvider,
         RemoteProviderRequestParamNames,
         VarGridHeaderAction,
         VarGridRowSelectedEvent, 
-        VarangInterceptor 
+        VarangInterceptor,
+        VarGridEvent 
       } from "./core";
  
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
@@ -328,7 +329,7 @@ export class VarGridHeaderRowView {
 
           <th VarGridHeaderColumnView  *ngFor="let header of headers" >
             <span *ngIf="header.type==='checkbox'"> <input type="checkbox" (click)="onHeaderCheckboxChecked($event, header.label)"/></span>
-            <span *ngIf="header.type==='regular'" (click)="onHeaderClicked($event, header.name)"><span>{{header.label}}</span><i  class="angle icon" [class.up]="headerActions[header.label].toggle===true" [class.down]="headerActions[header.label].toggle===false" ></i></span>
+            <span *ngIf="header.type==='regular'" (click)="onHeaderClicked($event, header.name)"><span>{{header.label}}</span><i  class="fa fa-sort" aria-hidden="true" [class.fa-sort-asc]="headerActions[header.label].toggle===true" [class.fa-sort-desc]="headerActions[header.label].toggle===false" ></i></span>
            </th>
          </tr>
           
@@ -336,9 +337,9 @@ export class VarGridHeaderRowView {
        <tbody >
          <ng-content select="VarGridRowView"></ng-content>
         <tr VarGridRowView  *ngFor="let row of rows; let i=index" [class.active]="isRowSelected(row.id)" >
-            <td VarGridColumnView *ngFor="let cell of row.cells; let j=index" (mouseup)="rowCellClicked($event, row.id, i, j)"   >
+            <td VarGridColumnView *ngFor="let cell of row.cells; let j=index" (mouseup)="rowCellClicked($event, row.id, i, j)" (dblclick)="rowCellDoubleClicked($event, row.id, i, j)">
             <span *ngIf="cell.type==='regular'"  >{{cell.content}}</span>
-            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (change)="rowCheckBoxChecked($event.target.checked,'checkbox',row.id, i, j)"  />
+            <input type="checkbox" *ngIf="cell.type==='checkbox'" [checked]="isRowSelected(row.id)" (change)="rowCheckBoxChecked($event.target.checked,'checkbox',row.id, i, j)"  />
             </td>
         </tr>
        </tbody>
@@ -353,7 +354,7 @@ export class VarGridHeaderRowView {
          <ul class = "pagination">
            <li  class="glyphicon glyphicon-fast-backward" (click)="seekToFirstPage()" ></li>
            <li class="glyphicon glyphicon-triangle-left" (click)="seekToPreviousPage()"></li>
-           <li > <input value="{{clientPagerParams.data.pageStart+1}}" style="width:40px;text-align: right;"/> / {{remoteDataProviderMapping.data.in.pageCount}} </li>
+           <li > <input value="{{clientPagerParams.data.pageStart}}"  [(ngModel)]="pageIndex" (change)="pageInputChanged($event)" style="width:40px;text-align: right;"/> / {{remoteDataProviderMapping.data.in.pageCount}} </li>
            
            <li class="glyphicon glyphicon-triangle-right" (click)="seekToNextPage()"></li>
            <li class="glyphicon glyphicon-fast-forward" (click)="seekToLastPage()"></li>
@@ -382,15 +383,21 @@ export class VarGrid{
   @ContentChildren(VarGridColumn)
   coldefs: QueryList<VarGridColumn>;
 
-  @Output() onRowSelected: EventEmitter<VarGridRowSelectedEvent> = new EventEmitter<VarGridRowSelectedEvent>();
-  
+  @Output() onRowSelected: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
+  @Output() onComplete: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
+  @Output() onRequest: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>(); 
+  @Output() onDataLoad: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>(); 
+  @Output() onRowInserting : EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
+  @Output() onRowDoubleClick: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
+  @Output() onSorting: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
+  @Output() onPaging: EventEmitter<VarGridEvent> = new EventEmitter<VarGridEvent>();
 
   public headers:VarGridHeaderColumnView[]= [];
   public rows:VarGridRowView[]=[];
   private headerActions: { [label: string] : VarGridHeaderAction } = {};
   public data:any[];
   public checkedRows:Map<string,Map<number, boolean>> = new Map<string,Map<number, boolean>>();
-
+  public pageIndex:number;
 	constructor(private http:Http) {
 	}
   
@@ -417,6 +424,8 @@ export class VarGrid{
   loadLocalDataOnInitializaton(){
     if (this.data===undefined || this.data.length==0)
       return;
+    this.onDataLoad.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.Before));
+
     //TODO, apply mapping of a best practice
     let newrows:VarGridRowView[] =[];
     this.data.forEach((row)=>{
@@ -435,16 +444,17 @@ export class VarGrid{
               if (this.checkedRows.get("checkbox").get(row["id"])!==undefined)
                 col.checked=true;
             }  
-              
+            
             newrow.cells.push(col);
          });
-         newrows.push(newrow);
+        this.onRowInserting.emit(new VarGridEvent("VarGrid","VarGrid",newrow, VarangInterceptor.Before));
+        newrows.push(newrow);
+        this.onRowInserting.emit(new VarGridEvent("VarGrid","VarGrid",newrow, VarangInterceptor.After));
       });
 
-
+    this.onDataLoad.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.After));
     this.rows=null;
     this.rows=newrows;
-    
   }
 
   xpathtoJsonProperty(json, xpath){
@@ -466,6 +476,7 @@ export class VarGrid{
     //let rows:any[] = griddata._embedded.persons;
     if (this.data===undefined || this.data.length==0)
       return;
+    this.onRequest.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.After));
     this.loadLocalDataOnInitializaton();
   }
 
@@ -489,6 +500,8 @@ export class VarGrid{
   }
 
   fetchRemoteDataOnInitializaton(){
+    this.onRequest.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.Before));
+
     let headers = new Headers({'Content-type':'application/json'});
     if (this.dataSource.methodType.toUpperCase()==="POST")
       this.http.post(this.dataSource.properties.url, 
@@ -520,11 +533,12 @@ export class VarGrid{
   }
 
   loadData(){
+       this.onComplete.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.Before));
        if (this.dataSource.dataOrigin==="local")
          this.loadLocalDataOnInitializaton();
        else if (this.dataSource.dataOrigin==="remote")
          this.fetchRemoteDataOnInitializaton();
-    
+       this.onComplete.emit(new VarGridEvent("VarGrid","VarGrid","VarGrid", VarangInterceptor.After));
   }
   initGrid(){
 
@@ -562,10 +576,13 @@ export class VarGrid{
   }
 
   seekToFirstPage(){
+      this.onPaging.emit(new VarGridEvent("VarGrid", "VarGrid", this.clientPagerParams.data, VarangInterceptor.Before));
       this.clientPagerParams.data.pageStart=0;
+
       this.seekToPage();
   }
   seekToLastPage(){
+    this.onPaging.emit(new VarGridEvent("VarGrid", "VarGrid", this.clientPagerParams.data, VarangInterceptor.Before));
     this.clientPagerParams.data.pageStart=this.remoteDataProviderMapping.data.in.pageCount-1;
 
     this.seekToPage();
@@ -574,28 +591,40 @@ export class VarGrid{
   seekToNextPage(){
     if ( (this.clientPagerParams.data.pageStart+1)>(this.remoteDataProviderMapping.data.in.pageCount-1))
       return;
+   this.onPaging.emit(new VarGridEvent("VarGrid", "VarGrid", this.clientPagerParams.data, VarangInterceptor.Before));
    this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart+1; 
    this.seekToPage();
   }
   seekToPreviousPage(){
     if ( (this.clientPagerParams.data.pageStart-1)<0)
       return;
+   this.onPaging.emit(new VarGridEvent("VarGrid", "VarGrid", this.clientPagerParams.data, VarangInterceptor.Before));
    this.clientPagerParams.data.pageStart=this.clientPagerParams.data.pageStart-1; 
    this.seekToPage();
+  }
+
+  pageInputChanged($event){
+    if ( this.clientPagerParams.data.pageStart<0 || this.clientPagerParams.data.pageStart>(this.remoteDataProviderMapping.data.in.pageCount-1))
+      return;
+    this.clientPagerParams.data.pageStart=this.pageIndex;
+    this.seekToPage();
   }
 
   seekToPage(){
       if (this.clientPagerParams.data.pageStart==-1)
         return;
       this.reloadGrid();
+      this.onPaging.emit(new VarGridEvent("VarGrid", "VarGrid", this.clientPagerParams.data, VarangInterceptor.After));
   }
 
   onHeaderClicked(event, name){
+      this.onSorting.emit( new VarGridEvent(event.source, event.target, name, VarangInterceptor.Before));
       this.headerActions[name].enabled=true;
       this.headerActions[name].toggle = !this.headerActions[name].toggle;
       this.clientPagerParams.data.sortOrder = this.headerActions[name].sord();
       this.clientPagerParams.data.sortIndex = name;
-      this.reloadGrid();   
+      this.reloadGrid();
+      this.onSorting.emit( new VarGridEvent(event.source, event.target, name, VarangInterceptor.After));
   }
 
   onHeaderCheckboxChecked($event, label:string) {
@@ -612,41 +641,35 @@ export class VarGrid{
   }
   
   rowCheckBoxChecked(checked:boolean, label:string, rowId:number, rowIndex:number, cellIndex:number) {
-    if (label==="checkbox"){
-      if (this.checkedRows.get("checkbox")===undefined)
-        this.checkedRows.set("checkbox", new Map<number,boolean>());
-    }  
-
+    if (label==="checkbox" && this.checkedRows.get("checkbox")===undefined)
+      this.checkedRows.set("checkbox", new Map<number,boolean>());
+    
     if (checked){
       this.checkedRows.get(label).set(rowId, true);
+      this.rows[rowIndex].cells[0].checked=true;
     }
-    else
+    else {
       this.checkedRows.get(label).delete(rowId);
-    
-    return true;
+      this.rows[rowIndex].cells[0].checked=false;
+    }
+    return false;
   }
 
   rowCellClicked($event, rowId:number, rowIndex:number, cellIndex:number){
-
     if (this.checkedRows.get("checkbox").get(rowId)!==undefined) {
       //row is already selected, do unselect
       this.rowCheckBoxChecked(false, "checkbox", rowId, rowIndex, 0);
-      this.rows[rowIndex].cells[0].checked=false;
       return;
     }
-    //new selection
     this.checkedRows.get("checkbox").set(rowId, true);
-    let rse = new VarGridRowSelectedEvent();
-    rse.rowId = rowId;
-    rse.target = $event.target;
-    rse.source = $event.source;
-    rse.value = this.data[rowId];
-    rse.intercept = VarangInterceptor.After;
-    this.onRowSelected.emit(rse);
     this.rowCheckBoxChecked(true, "checkbox", rowId, rowIndex, cellIndex);
-    //alert(rowIndex);
-    this.rows[rowIndex].cells[0].checked=true;
-    return true;
+    this.onRowSelected.emit(new VarGridEvent($event.source, $event.target, {"rowId":rowId, "rowIndex":rowIndex, "cellIndex":cellIndex}, VarangInterceptor.After));
+    return false;
+  }
+
+  rowCellDoubleClicked($event, rowId:number, rowIndex:number, cellIndex:number){
+    this.onRowDoubleClick.emit(new VarGridEvent($event.source, $event.target, {"rowId":rowId, "rowIndex":rowIndex, "cellIndex":cellIndex}, VarangInterceptor.After));
+    return false;
   }
 
 

@@ -7,8 +7,9 @@ import {
 	VarGridRemoteDataProviderMapping, 
 	VarGridRow,
 	VarGridColumn,
-	VarGridDataSource } from "../components/VarGrid";
-import {VarGridRowSelectedEvent} from "../components/core";
+	VarGridDataSource
+	 } from "../components/VarGrid";
+import {VarGridEvent, VarangInterceptor} from "../components/core";
 
 @Component({
   selector: 'my-app',
@@ -19,8 +20,16 @@ providers:[ HTTP_PROVIDERS],
 export class AppComponent { 
 
 
-gridRowSelected(event:VarGridRowSelectedEvent) {
-	//alert(JSON.stringify(event));
+gridRowSelected(event:VarGridEvent) {
+	alert("rowid:"+JSON.stringify(event.value.rowId));
+}
+
+onGridPaging(event:VarGridEvent) {
+	if (event.intercept = VarangInterceptor.Before){
+		//alert("before paging");
+	} else if (event.intercept = VarangInterceptor.After) {
+		//alert("after paging");
+	}
 }
 }
 

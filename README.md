@@ -165,19 +165,19 @@ VarGrid;
 6. Sorting
 7. Spring Data Rest integration
 8. Checkboxed rows
+9. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
 
 
 ### Next to do
 
-1. Event handlings: onComplete, onBeforeRequest, onAfterRequest, onBeforeRowInserting, onAfterRowInserting, onRowSelect, on CellSelect, onDoubleClick, onBeforeSorting, onAfterSorting, onBeforePaging, onAfterPaging.
-2. Search dialog
-3. Search toolbar
-4. Drag and drop columns
-5. Footer buttons
-6. Pdf and excel export drivers.
-7. Column grouping
-8. Button cells
-9. Subgrid
-10. UI enhancement
-11. Adaptable css templates
-12. Editable row
+1. Search dialog
+2. Search toolbar
+3. Drag and drop columns
+4. Footer buttons
+5. Pdf and excel export drivers.
+6. Column grouping
+7. Button cells
+8. Subgrid
+9. UI enhancement
+10. Adaptable css templates
+11. Editable row
