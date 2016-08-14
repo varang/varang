@@ -40,6 +40,24 @@ export class DataSourceProperties {
   url:string="id";
 }
 
+export enum VarangInterceptor {Before=0, After=1}
+
+export class VarangEvent {
+    source:any;
+    target:any;
+    value:any;    
+    intercept:VarangInterceptor=VarangInterceptor.Before; //before, after
+}
+
+export class VarGridEvent extends VarangEvent {
+    
+}
+
+export class VarGridRowSelectedEvent extends VarGridEvent {
+    rowId:number;
+}
+
+
 
 export class VarGridHeaderAction {
   public toggle:boolean;

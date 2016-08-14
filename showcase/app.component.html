@@ -54,8 +54,8 @@
 
 
 <div >
-
-<VarGrid>
+ 
+<VarGrid (onRowSelected)="gridRowSelected($event)">
 	<VarGridDataSource methodType="GET" dataOrigin="remote" 
 		[loadOnInit]="true"  url="url" serverType="spring-datarest">
 		{

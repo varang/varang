@@ -8,6 +8,7 @@ import {
 	VarGridRow,
 	VarGridColumn,
 	VarGridDataSource } from "../components/VarGrid";
+import {VarGridRowSelectedEvent} from "../components/core";
 
 @Component({
   selector: 'my-app',
@@ -15,5 +16,11 @@ import {
 providers:[ HTTP_PROVIDERS],
   templateUrl:"showcase/app.component.html" 
 })
-export class AppComponent { }
+export class AppComponent { 
+
+
+gridRowSelected(event:VarGridRowSelectedEvent) {
+	//alert(JSON.stringify(event));
+}
+}
 

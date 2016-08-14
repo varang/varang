@@ -13,7 +13,8 @@ import {Component,
         AfterViewInit, 
         AfterViewChecked, 
         AfterContentInit,
-        Inject
+        Inject,
+        EventEmitter
       } from "@angular/core";
 import {Http, Headers} from "@angular/http";
 import {RemoteDataProvider, 
@@ -21,7 +22,9 @@ import {RemoteDataProvider,
         DataSourceProperties, 
         RemoteProviderPagingParams,
         RemoteProviderRequestParamNames,
-        VarGridHeaderAction 
+        VarGridHeaderAction,
+        VarGridRowSelectedEvent, 
+        VarangInterceptor 
       } from "./core";
  
 // <VarGridClientPagerParams [pageSize]='11' [sord]='ASC' [sidx]='id' [pageStart]='0' [pageSizes]='[10,20,50]'>
@@ -188,6 +191,7 @@ export class VarGridRowView {
   cells:VarGridColumnView[]=[];
   @Input() checked:boolean;
   type:string="regular";
+  id:number;
 
   constructor() {
     // this.cells.push(new VarGridColumnView());
@@ -331,10 +335,10 @@ export class VarGridHeaderRowView {
        </thead>
        <tbody >
          <ng-content select="VarGridRowView"></ng-content>
-        <tr VarGridRowView  *ngFor="let row of rows; let i=index">
-            <td VarGridColumnView *ngFor="let cell of row.cells">
-            <span *ngIf="cell.type==='regular'">{{cell.content}}</span>
-            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (click)="onRowCheckboxChecked($event, cell.label, i)" />
+        <tr VarGridRowView  *ngFor="let row of rows; let i=index" [class.active]="isRowSelected(row.id)" >
+            <td VarGridColumnView *ngFor="let cell of row.cells; let j=index" (mouseup)="rowCellClicked($event, row.id, i, j)"   >
+            <span *ngIf="cell.type==='regular'"  >{{cell.content}}</span>
+            <input type="checkbox" *ngIf="cell.type==='checkbox'" [(ngModel)]="cell.checked" (change)="rowCheckBoxChecked($event.target.checked,'checkbox',row.id, i, j)"  />
             </td>
         </tr>
        </tbody>
@@ -377,6 +381,8 @@ export class VarGrid{
   rowdef: VarGridRow;
   @ContentChildren(VarGridColumn)
   coldefs: QueryList<VarGridColumn>;
+
+  @Output() onRowSelected: EventEmitter<VarGridRowSelectedEvent> = new EventEmitter<VarGridRowSelectedEvent>();
   
 
   public headers:VarGridHeaderColumnView[]= [];
@@ -416,6 +422,7 @@ export class VarGrid{
     this.data.forEach((row)=>{
           let newrow = new VarGridRowView();
           let cols:VarGridColumnView[] = this.copyColumnView(this.rowdef.coldefs);
+          newrow.id = row.id;
           Object.keys(row).forEach((key)=>{
           let idx = this.findColumnViewIndexByName(cols, key);
           if (idx!=-1)
@@ -433,6 +440,7 @@ export class VarGrid{
          });
          newrows.push(newrow);
       });
+
 
     this.rows=null;
     this.rows=newrows;
@@ -465,7 +473,6 @@ export class VarGrid{
     let params = this.buildPostParams();
     let paramstring:string="";
     Object.keys(params).forEach((key)=>paramstring+="&"+key+"="+params[key]);
-
     return "?"+paramstring.substring(1);
   }
 
@@ -580,7 +587,6 @@ export class VarGrid{
   seekToPage(){
       if (this.clientPagerParams.data.pageStart==-1)
         return;
-
       this.reloadGrid();
   }
 
@@ -605,15 +611,50 @@ export class VarGrid{
       }
   }
   
-  onRowCheckboxChecked($event, label:string, idx:number) {
-    //alert($event.target.checked);
-    alert(label+":"+this.data[idx].id);
+  rowCheckBoxChecked(checked:boolean, label:string, rowId:number, rowIndex:number, cellIndex:number) {
+    if (label==="checkbox"){
+      if (this.checkedRows.get("checkbox")===undefined)
+        this.checkedRows.set("checkbox", new Map<number,boolean>());
+    }  
 
-    if ($event.target.value)
-      this.checkedRows.get(label).set(this.data[idx].id, true);
+    if (checked){
+      this.checkedRows.get(label).set(rowId, true);
+    }
     else
-      this.checkedRows.get(label).delete(this.data[idx].id);
+      this.checkedRows.get(label).delete(rowId);
+    
+    return true;
+  }
 
+  rowCellClicked($event, rowId:number, rowIndex:number, cellIndex:number){
+
+    if (this.checkedRows.get("checkbox").get(rowId)!==undefined) {
+      //row is already selected, do unselect
+      this.rowCheckBoxChecked(false, "checkbox", rowId, rowIndex, 0);
+      this.rows[rowIndex].cells[0].checked=false;
+      return;
+    }
+    //new selection
+    this.checkedRows.get("checkbox").set(rowId, true);
+    let rse = new VarGridRowSelectedEvent();
+    rse.rowId = rowId;
+    rse.target = $event.target;
+    rse.source = $event.source;
+    rse.value = this.data[rowId];
+    rse.intercept = VarangInterceptor.After;
+    this.onRowSelected.emit(rse);
+    this.rowCheckBoxChecked(true, "checkbox", rowId, rowIndex, cellIndex);
+    //alert(rowIndex);
+    this.rows[rowIndex].cells[0].checked=true;
+    return true;
+  }
+
+
+
+  isRowSelected(rowId:number){
+     if (this.checkedRows.get("checkbox")===undefined)
+        this.checkedRows.set("checkbox", new Map<number,boolean>());
+      return this.checkedRows.get("checkbox").get(rowId)!==undefined;
   }
 }
 
