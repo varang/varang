@@ -54,7 +54,7 @@ VarAng is a UI components library based on Angular 2. At the moment VarGrid (dat
 
 and this is the output.
 
-![Basic apperance of VarGrid-v022] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v0.2.2-output.png "Var Grid v0.2.2 output screenshot")
+![Basic apperance of VarGrid-v025] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v025-output.png "Var Grid v0.2.5 output screenshot")
 
 For the example above, the rest api provided by "http://localhost:8080/ebys/datarest/persons" produces json structure below.
 
@@ -153,7 +153,7 @@ and VarGrid becomes aware of the json structure with the configuration below. Va
 ```
 
 
-### VarGrid-v0.2.0 has the functionalities below.
+### VarGrid-v0.2.5 has the functionalities below.
 
 VarGrid;
 
