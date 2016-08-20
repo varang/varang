@@ -58,12 +58,6 @@ VarGrid has a syntax below.
 
 There are four configuration sections: VarGridDataSource, VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow having the explanation below.
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
 | Tag Name       	| Explanation|
 |-----------------|------------|
 | __VarGridDataSource__ | The datasource integration is done in this section. The attribute __dataOrigin__ defines the location of the datasource. The string __local__ indicates that the data source in client side and the string __remote__ indicates that the data source in server side. When the __dataOrigin__ is defined as _remote_, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have __url__ and its counter value that indicates the remote data source URL serving paginated data source.|
