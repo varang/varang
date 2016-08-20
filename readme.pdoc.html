@@ -1,0 +1,289 @@
+<h1 id="table-of-content-toc">Table of Content (TOC)</h1>
+<ul>
+<li><a href="#0100-Introduction">0100 Introduction</a></li>
+<li><a href="#0200-Components">0200 Components</a></li>
+<li><a href="#0210-VarGrid">0210 --VarGrid</a></li>
+<li><a href="#0999-conclusion">0999 Conclusion</a></li>
+</ul>
+<h2 id="introduction">0100 Introduction</h2>
+<div id='0100-introduction'/>
+
+
+<p>VarAng is a UI components library based on Angular 2. At the moment <a href="#0210-VarGrid">VarGrid</a> (data table) is implemented. You can see the npm package from <a href="https://www.npmjs.com/package/varang">here</a> and source code from <a href="https://github.com/varang/varang">here</a>. There is a Spring Data Rest implementation in <a href="https://github.com/varang/varang-test">this</a> address. Here is the syntax. Varang project aims to develop the components below.</p>
+<ol style="list-style-type: decimal">
+<li><a href="#0210-VarGrid">VarGrid</a></li>
+<li>VarTab</li>
+<li>VarMenu</li>
+<li>VarTree</li>
+<li>VarTreeTable</li>
+<li>VarList</li>
+<li>VarChat ##VarAng Components
+<div id='0200-components'/>
+</li>
+</ol>
+<p>VarAng aims to develop the components below.</p>
+<ol style="list-style-type: decimal">
+<li><a href="#0210-VarGrid">VarGrid</a></li>
+<li>VarTab</li>
+<li>VarMenu</li>
+<li>VarTree</li>
+<li>VarTreeTable</li>
+<li>VarList</li>
+<li>VarChat</li>
+</ol>
+<h2 id="vargrid">0210 VarGrid</h2>
+<div id='0210-VarGrid'/>
+
+<p>VarGrid is a datatable that supports the functionalities below at the moment (v0.2.6). There is a VarGrid show case that is integrated with Spring Data Rest in <a href="https://github.com/varang/varang-test">this</a> address.</p>
+<p>VarGrid has a syntax below.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;VarGrid&gt;</span>
+    <span class="kw">&lt;VarGridDataSource</span><span class="ot"> methodType=</span><span class="st">&quot;POST&quot;</span><span class="ot"> dataOrigin=</span><span class="st">&quot;remote&quot;</span> 
+<span class="ot">        loadOnInit=</span><span class="st">&quot;true&quot;</span><span class="ot">  url=</span><span class="st">&quot;url&quot;</span><span class="ot"> serverType=</span><span class="st">&quot;rest&quot;</span><span class="kw">&gt;</span>
+        {
+        &quot;url&quot;:&quot;http://localhost:8080/ebys/datarest/persons&quot;
+        }
+    <span class="kw">&lt;/VarGridDataSource&gt;</span>
+    
+    <span class="kw">&lt;VarGridRemoteDataProviderMapping&gt;</span>
+        {
+            &quot;in&quot;:{
+                &quot;jsonXPath&quot;:
+                    {
+                        &quot;list&quot;: &quot;_embedded.persons&quot;,
+                        &quot;pageSize&quot;: &quot;page.size&quot;,
+                        &quot;pageIndex&quot;: &quot;page.number&quot;,
+                        &quot;total&quot;: &quot;page.totalElements&quot;
+                    }
+            },
+            &quot;out&quot;:{
+                &quot;pageStart&quot;: &quot;page&quot;,
+                &quot;pageSize&quot;: &quot;rows&quot;,
+                &quot;sortIndex&quot;:&quot;sidx&quot;,
+                &quot;sortOrder&quot;: &quot;sord&quot;
+            }
+        }
+    <span class="kw">&lt;/VarGridRemoteDataProviderMapping&gt;</span>         
+
+    <span class="kw">&lt;VarGridClientPagerParams&gt;</span>
+        {
+            &quot;id&quot;:&quot;id&quot;,
+            &quot;sortIndex&quot;: &quot;id&quot;,
+            &quot;pageSize&quot;: 10,
+            &quot;pageSizes&quot;: [10,30,50],
+            &quot;sortOrder&quot;: &quot;ASC&quot;,
+            &quot;pageStart&quot;: 0
+        }
+    <span class="kw">&lt;/VarGridClientPagerParams&gt;</span> 
+
+    <span class="kw">&lt;VarGridRow&gt;</span>
+        <span class="kw">&lt;VarGridColumn</span><span class="ot"> label=</span><span class="st">&quot;checkbox&quot;</span><span class="ot">  styleClass=</span><span class="st">&quot;grid_checkbox&quot;</span><span class="ot"> type=</span><span class="st">&quot;checkbox&quot;</span><span class="kw">&gt;&lt;/VarGridColumn&gt;</span>
+        <span class="kw">&lt;VarGridColumn</span><span class="ot"> label=</span><span class="st">&quot;id&quot;</span><span class="ot"> name=</span><span class="st">&quot;id&quot;</span><span class="ot"> styleClass=</span><span class="st">&quot;grid_id&quot;</span> <span class="kw">&gt;&lt;/VarGridColumn&gt;</span>
+        <span class="kw">&lt;VarGridColumn</span><span class="ot"> label=</span><span class="st">&quot;name&quot;</span><span class="ot"> name=</span><span class="st">&quot;name&quot;</span><span class="ot"> styleClass=</span><span class="st">&quot;grid_name&quot;</span> <span class="kw">&gt;&lt;/VarGridColumn&gt;</span>
+        <span class="kw">&lt;VarGridColumn</span><span class="ot"> label=</span><span class="st">&quot;firstName&quot;</span><span class="ot"> name=</span><span class="st">&quot;firstName&quot;</span><span class="ot"> styleClass=</span><span class="st">&quot;grid_firstName&quot;</span> <span class="kw">&gt;&lt;/VarGridColumn&gt;</span>
+    <span class="kw">&lt;/VarGridRow&gt;</span>
+
+<span class="kw">&lt;/VarGrid&gt;</span></code></pre></div>
+<p>There are four configuration sections: VarGridDataSource, VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow having the explanation below.</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>VarGridDataSource</strong></td>
+<td>The datasource integration is done in this section. The attribute <strong>dataOrigin</strong> defines the location of the datasource. The string <strong>local</strong> indicates that the data source in client side and the string <strong>remote</strong> indicates that the data source in server side. When the <strong>dataOrigin</strong> is defined as <em>remote</em>, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have <strong>url</strong> and its counter value that indicates the remote data source URL serving paginated data source.</td>
+</tr>
+<tr class="even">
+<td><strong>VarGridRemoteDataProviderMapping</strong></td>
+<td>This section defines the server side integration parameters. The content of this section should be JSON hash map and have <strong>in</strong> and <strong>out</strong> parameters defined. The parameters of <strong>in</strong> define the structure of remote data that is being paginated. The parameters “out” defines the query parameters that are subject to be send to the server. The configuration parameters <strong>in</strong> and <strong>out</strong> helps front-end developer have a free data structure in server side regarding the pagination mechanism.</td>
+</tr>
+<tr class="odd">
+<td><strong>VarGridClientPagerParams</strong></td>
+<td>This section is solely defines the the cilent side parameters. It differs from <strong>out</strong> parameter of <strong>VarGridRemoteDataProviderMapping</strong> in such a way that it does not responsible from integration but the representation of the data in client side.</td>
+</tr>
+<tr class="even">
+<td><strong>VarGridRow</strong></td>
+<td>This section defines the column model of VarGrid. Each VarGridColumn inside VarGridRow should define <strong>label</strong> and <strong>name</strong> attributes that should match the server side’s data array’s column naming policy. The column labeled <strong>checkbox</strong> enables the <strong>VarGrid</strong> have a checkboxed column. The order of checkboxed column can be changed among the column definitions that are defined by <strong>VarGridColumn</strong>. Accordingly, the place of the checboxed column will change.</td>
+</tr>
+</tbody>
+</table>
+<p>The configuration above results in a display below if the server side is properly configured. There is a server side paginated data implementation which is developed by Spring Boot in <a href="https://github.com/varang/varang-test">this</a> address.</p>
+<p>[Basic apperance of VarGrid-v025] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v025-output.png “Var Grid v0.2.5 output screenshot”)</p>
+<p>For the Spring Boot implementation that is provided in <a href="https://github.com/varang/varang-test">this</a> address, the rest api provided by <strong>http://localhost:8080/ebys/datarest/persons</strong> produces json structure below.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">{</span>
+  <span class="st">&quot;_embedded&quot;</span> <span class="op">:</span> <span class="op">{</span>
+    <span class="st">&quot;persons&quot;</span> <span class="op">:</span> [ <span class="op">{</span>
+      <span class="st">&quot;id&quot;</span> <span class="op">:</span> <span class="dv">1</span><span class="op">,</span>
+      <span class="st">&quot;code&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;aciklama&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;active&quot;</span> <span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
+      <span class="st">&quot;version&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;md5&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;createTime&quot;</span> <span class="op">:</span> <span class="st">&quot;2016-06-05T13:24:36.827+0000&quot;</span><span class="op">,</span>
+      <span class="st">&quot;updateTime&quot;</span> <span class="op">:</span> <span class="st">&quot;2016-06-05T13:24:36.827+0000&quot;</span><span class="op">,</span>
+      <span class="st">&quot;firstName&quot;</span> <span class="op">:</span> <span class="st">&quot;person 0&quot;</span><span class="op">,</span>
+      <span class="st">&quot;_links&quot;</span> <span class="op">:</span> <span class="op">{</span>
+        <span class="st">&quot;self&quot;</span> <span class="op">:</span> <span class="op">{</span>
+          <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons/1&quot;</span>
+        <span class="op">},</span>
+        <span class="st">&quot;person&quot;</span> <span class="op">:</span> <span class="op">{</span>
+          <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons/1{?projection}&quot;</span><span class="op">,</span>
+          <span class="st">&quot;templated&quot;</span> <span class="op">:</span> <span class="kw">true</span>
+        <span class="op">}</span>
+      <span class="op">}</span>
+    <span class="op">},</span> <span class="op">{</span>
+      <span class="st">&quot;id&quot;</span> <span class="op">:</span> <span class="dv">2</span><span class="op">,</span>
+      <span class="st">&quot;code&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;aciklama&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;active&quot;</span> <span class="op">:</span> <span class="kw">true</span><span class="op">,</span>
+      <span class="st">&quot;version&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;md5&quot;</span> <span class="op">:</span> <span class="kw">null</span><span class="op">,</span>
+      <span class="st">&quot;createTime&quot;</span> <span class="op">:</span> <span class="st">&quot;2016-06-05T13:24:36.867+0000&quot;</span><span class="op">,</span>
+      <span class="st">&quot;updateTime&quot;</span> <span class="op">:</span> <span class="st">&quot;2016-06-05T13:24:36.867+0000&quot;</span><span class="op">,</span>
+      <span class="st">&quot;firstName&quot;</span> <span class="op">:</span> <span class="st">&quot;person 1&quot;</span><span class="op">,</span>
+      <span class="st">&quot;_links&quot;</span> <span class="op">:</span> <span class="op">{</span>
+        <span class="st">&quot;self&quot;</span> <span class="op">:</span> <span class="op">{</span>
+          <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons/2&quot;</span>
+        <span class="op">},</span>
+        <span class="st">&quot;person&quot;</span> <span class="op">:</span> <span class="op">{</span>
+          <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons/2{?projection}&quot;</span><span class="op">,</span>
+          <span class="st">&quot;templated&quot;</span> <span class="op">:</span> <span class="kw">true</span>
+        <span class="op">}</span>
+      <span class="op">}</span>
+    <span class="op">},</span>
+    ]
+  <span class="op">},</span>
+  <span class="st">&quot;_links&quot;</span> <span class="op">:</span> <span class="op">{</span>
+    <span class="st">&quot;first&quot;</span> <span class="op">:</span> <span class="op">{</span>
+      <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons?page=0&amp;rows=10&quot;</span>
+    <span class="op">},</span>
+    <span class="st">&quot;self&quot;</span> <span class="op">:</span> <span class="op">{</span>
+      <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons&quot;</span>
+    <span class="op">},</span>
+    <span class="st">&quot;next&quot;</span> <span class="op">:</span> <span class="op">{</span>
+      <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons?page=1&amp;rows=10&quot;</span>
+    <span class="op">},</span>
+    <span class="st">&quot;last&quot;</span> <span class="op">:</span> <span class="op">{</span>
+      <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/persons?page=46&amp;rows=10&quot;</span>
+    <span class="op">},</span>
+    <span class="st">&quot;profile&quot;</span> <span class="op">:</span> <span class="op">{</span>
+      <span class="st">&quot;href&quot;</span> <span class="op">:</span> <span class="st">&quot;http://localhost:8080/ebys/datarest/profile/persons&quot;</span>
+    <span class="op">}</span>
+  <span class="op">},</span>
+  <span class="st">&quot;page&quot;</span> <span class="op">:</span> <span class="op">{</span>
+    <span class="st">&quot;size&quot;</span> <span class="op">:</span> <span class="dv">10</span><span class="op">,</span>
+    <span class="st">&quot;totalElements&quot;</span> <span class="op">:</span> <span class="dv">461</span><span class="op">,</span>
+    <span class="st">&quot;totalPages&quot;</span> <span class="op">:</span> <span class="dv">47</span><span class="op">,</span>
+    <span class="st">&quot;number&quot;</span> <span class="op">:</span> <span class="dv">0</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>and VarGrid becomes aware of the json structure with the configuration below. VarGrid consumes the &quot;_embedded.persons&quot; JSON list provided above by having the configuration &quot;list&quot;: &quot;_embedded.persons&quot;.</p>
+<div class="sourceCode"><pre class="sourceCode html"><code class="sourceCode html">    <span class="kw">&lt;VarGridRemoteDataProviderMapping&gt;</span>
+        {
+            &quot;in&quot;:{
+                &quot;jsonXPath&quot;:
+                    {
+                        &quot;list&quot;: &quot;_embedded.persons&quot;,
+                        &quot;pageSize&quot;: &quot;page.size&quot;,
+                        &quot;pageIndex&quot;: &quot;page.number&quot;,
+                        &quot;total&quot;: &quot;page.totalElements&quot;
+                    }
+            },
+            &quot;out&quot;:{
+                &quot;pageStart&quot;: &quot;page&quot;,
+                &quot;pageSize&quot;: &quot;rows&quot;,
+                &quot;sortIndex&quot;:&quot;sidx&quot;,
+                &quot;sortOrder&quot;: &quot;sord&quot;
+            }
+        }
+    <span class="kw">&lt;/VarGridRemoteDataProviderMapping&gt;</span>         </code></pre></div>
+<h3 id="features">Features</h3>
+<p>VarGrid-v0.2.5 supports</p>
+<ol style="list-style-type: decimal">
+<li>Bootstap css framework.</li>
+<li>Configurable GET and POST methods</li>
+<li>Local (static) and remote (REST) data sources.</li>
+<li>Ajax based pagination</li>
+<li>Different varying data structure. One can adapt the data structure mapping by configuration parameters.</li>
+<li>Sorting</li>
+<li>Spring Data Rest integration</li>
+<li>Checkboxed rows</li>
+<li>Event handlings: onComplete, onRequest, onRowInserting, onRowSelect, onDoubleClick, onSorting, onPaging</li>
+</ol>
+<h3 id="events">Events</h3>
+<p>VarGrid supports events below.</p>
+<ol style="list-style-type: decimal">
+<li>onComplete</li>
+<li>onRequest</li>
+<li>onRowInserting</li>
+<li>onRowSelect</li>
+<li>onDoubleClick</li>
+<li>onSorting</li>
+<li>onPaging</li>
+</ol>
+<p>All events are subscribed in the tag <strong><VarGrid></strong> and have two phases:before and after. You can see an example <a href="#0210-event-interceptor-example">here</a>.</p>
+<p>The type of the events is <strong>VarGridEvent</strong> that has definition below.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="im">export</span> <span class="kw">enum</span> VarangInterceptor <span class="op">{</span>Before<span class="op">=</span><span class="dv">0</span><span class="op">,</span> After<span class="op">=</span><span class="dv">1</span><span class="op">}</span>
+
+<span class="im">export</span> <span class="kw">class</span> VarangEvent <span class="op">{</span>
+    <span class="dt">source</span><span class="op">:</span>any<span class="op">;</span>
+    <span class="dt">target</span><span class="op">:</span>any<span class="op">;</span>
+    <span class="dt">value</span><span class="op">:</span>any<span class="op">;</span>    
+    <span class="dt">intercept</span><span class="op">:</span>VarangInterceptor<span class="op">=</span><span class="va">VarangInterceptor</span>.<span class="at">Before</span><span class="op">;</span> <span class="co">//before, after</span>
+
+    <span class="at">constructor</span>(<span class="dt">s</span><span class="op">:</span>any<span class="op">,</span><span class="dt">t</span><span class="op">:</span>any<span class="op">,</span><span class="dt">v</span><span class="op">:</span>any<span class="op">,</span><span class="dt">i</span><span class="op">:</span>VarangInterceptor)<span class="op">{</span>
+      <span class="kw">this</span>.<span class="at">source</span> <span class="op">=</span> s<span class="op">;</span>
+      <span class="kw">this</span>.<span class="at">target</span> <span class="op">=</span> t<span class="op">;</span>
+      <span class="kw">this</span>.<span class="at">value</span> <span class="op">=</span> v<span class="op">;</span>
+      <span class="kw">this</span>.<span class="at">intercept</span> <span class="op">=</span> i<span class="op">;</span>
+   <span class="op">}</span>   
+
+<span class="op">}</span>
+
+<span class="im">export</span> <span class="kw">class</span> VarGridEvent <span class="kw">extends</span> VarangEvent <span class="op">{</span>
+  <span class="at">constructor</span>(<span class="dt">s</span><span class="op">:</span>any<span class="op">,</span><span class="dt">t</span><span class="op">:</span>any<span class="op">,</span><span class="dt">v</span><span class="op">:</span>any<span class="op">,</span><span class="dt">i</span><span class="op">:</span>VarangInterceptor)<span class="op">{</span>
+    <span class="kw">super</span>(s<span class="op">,</span>t<span class="op">,</span>v<span class="op">,</span>i)<span class="op">;</span>
+   <span class="op">}</span> 
+<span class="op">}</span>   </code></pre></div>
+<div id="0210-event-interceptor-example"/>
+<h3 id="event-subscription-example">Event Subscription Example</h3>
+<p>Here is an example that sets an event while paging.</p>
+<p>Paging callback function should be registered in VarGrid tag as shown below.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="op">&lt;</span><span class="at">VarGrid</span> (onPaging)<span class="op">=</span><span class="st">&quot;onGridPaging($event)&quot;</span><span class="op">&gt;</span>
+...<span class="op">!</span>configuration parameters<span class="op">!</span>...
+<span class="op">&lt;</span><span class="ss">/VarGrid&gt;</span></code></pre></div>
+<p>The call back function <em>onGridPaging</em> should have implementation below.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">onGridPaging</span>(event<span class="op">:</span>VarGridEvent) <span class="op">{</span>
+    <span class="cf">if</span> (<span class="va">event</span>.<span class="at">intercept</span> <span class="op">=</span> <span class="va">VarangInterceptor</span>.<span class="at">Before</span>)<span class="op">{</span>
+        <span class="at">alert</span>(<span class="st">&quot;before paging&quot;</span>)<span class="op">;</span>
+    <span class="op">}</span> <span class="cf">else</span> <span class="cf">if</span> (<span class="va">event</span>.<span class="at">intercept</span> <span class="op">=</span> <span class="va">VarangInterceptor</span>.<span class="at">After</span>) <span class="op">{</span>
+        <span class="at">alert</span>(<span class="st">&quot;after paging&quot;</span>)<span class="op">;</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<p>The input parameter of the ongGrdPaging function should be in the VarGridEvent type. To handle different phases of the event, for example before paging or after paging, <em>event.interceptor</em> value should be checked as in the example above.</p>
+<h3 id="next-to-do">Next to do</h3>
+<p>VarGrid is still in development. The features below are intented to be developed. The next fetaure to be added is <em>Changeable column orders</em></p>
+<ol style="list-style-type: decimal">
+<li>Changeable column orders</li>
+<li>Column grouping</li>
+<li>Search dialog</li>
+<li>Search toolbar</li>
+<li>Footer buttons</li>
+<li>Pdf and excel export drivers.</li>
+<li>Button cells</li>
+<li>Subgrid</li>
+<li>UI enhancement</li>
+<li>Adaptable css templates</li>
+<li>Editable row</li>
+</ol>
+<h2 id="conclusion">0999 Conclusion</h2>
+<div id='0999-conclusion'/>
+
+<p>This is the end.</p>

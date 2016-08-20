@@ -21,7 +21,7 @@ export class AppComponent {
 
 
 gridRowSelected(event:VarGridEvent) {
-	alert("rowid:"+JSON.stringify(event.value.rowId));
+	//alert("rowid:"+JSON.stringify(event.value.rowId));
 }
 
 onGridPaging(event:VarGridEvent) {
