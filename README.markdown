@@ -12,7 +12,13 @@ Table of Content (TOC)
 <div id='0100-introduction'/>
 
 
-VarAng is a UI components library based on Angular 2. At the moment [VarGrid](#0210-VarGrid) (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang) and source code from [here](https://github.com/varang/varang). There is a Spring Data Rest implementation in [this](https://github.com/varang/varang-test) address. Here is the syntax. Varang project aims to develop the components below.
+VarAng is a UI components library based on Angular 2. At the moment
+[VarGrid](#0210-VarGrid) (data table) is implemented. You can see the
+npm package from [here](https://www.npmjs.com/package/varang) and source
+code from [here](https://github.com/varang/varang). There is a Spring
+Data Rest implementation in
+[this](https://github.com/varang/varang-test) address. Here is the
+syntax. Varang project aims to develop the components below.
 
 1.  [VarGrid](#0210-VarGrid)
 2.  VarTab
@@ -38,11 +44,14 @@ VarAng aims to develop the components below.
 
 <div id='0210-VarGrid'/>
 
-VarGrid is a datatable that supports the functionalities below at the moment (v0.2.6). There is a VarGrid show case that is integrated with Spring Data Rest in [this](https://github.com/varang/varang-test) address.
+VarGrid is a datatable that supports the functionalities below at the
+moment (v0.2.6). There is a VarGrid show case that is integrated with
+Spring Data Rest in [this](https://github.com/varang/varang-test)
+address.
 
 VarGrid has a syntax below.
 
-``` html
+``` {.html}
 <VarGrid>
     <VarGridDataSource methodType="POST" dataOrigin="remote" 
         loadOnInit="true"  url="url" serverType="rest">
@@ -92,17 +101,68 @@ VarGrid has a syntax below.
 </VarGrid>
 ```
 
-There are four configuration sections: VarGridDataSource, VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow having the explanation below.
+There are four configuration sections: VarGridDataSource,
+VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow
+having the explanation below.
 
--   ——————+—————————————————————————————————————-+ | Section | Explanation | +===================+================================================================================================================+ | **VarGridDataSource** | The datasource integration is done in this section. The attribute **dataOrigin** defines the location of the datasource. The string **local** indicates that the data source in client side and the string **remote** indicates that the data source in server side. When the **dataOrigin** is defined as *remote*, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have **url** and its counter value that indicates the remote data source URL serving paginated data source.| +——————-+—————————————————————————————————————-+ | **VarGridRemoteDataProviderMapping** | This section defines the server side integration parameters. The content of this section should be JSON hash map and have **in** and **out** parameters defined. The parameters of **in** define the structure of remote data that is being paginated. The parameters “out” defines the query parameters that are subject to be send to the server. The configuration parameters **in** and **out** helps front-end developer have a free data structure in server side regarding the pagination mechanism. | +——————-+—————————————————————————————————————-+ | **VarGridClientPagerParams** | This section is solely defines the the cilent side parameters. It differs from **out** parameter of **VarGridRemoteDataProviderMapping** in such a way that it does not responsible from integration but the representation of the data in client side. | +——————-+—————————————————————————————————————-+ |**VarGridRow**| This section defines the column model of VarGrid. Each VarGridColumn inside VarGridRow should define **label** and **name** attributes that should match the server side’s data array’s column naming policy. The column labeled **checkbox** enables the **VarGrid** have a checkboxed column. The order of checkboxed column can be changed among the column definitions that are defined by **VarGridColumn**. Accordingly, the place of the checboxed column will change.| +——————-+—————————————————————————————————————-+
+  Tables                Are           Cool
+  --------------- --------------- --------
+  col 3 is         right-aligned    \$1600
+  col 2 is           centered         \$12
+  zebra stripes      are neat          \$1
 
-The configuration above results in a display below if the server side is properly configured. There is a server side paginated data implementation which is developed by Spring Boot in [this](https://github.com/varang/varang-test) address.
+-   ——————+—————————————————————————————————————-+ | Section |
+    Explanation |
+    +===================+================================================================================================================+
+    | **VarGridDataSource** | The datasource integration is done in
+    this section. The attribute **dataOrigin** defines the location of
+    the datasource. The string **local** indicates that the data source
+    in client side and the string **remote** indicates that the data
+    source in server side. When the **dataOrigin** is defined as
+    *remote*, there should be a JSON hash table in the child content of
+    VarGridDataSource and the hash table should contain a (key, value)
+    pair where the key should have **url** and its counter value that
+    indicates the remote data source URL serving paginated data source.|
+    +——————-+—————————————————————————————————————-+ |
+    **VarGridRemoteDataProviderMapping** | This section defines the
+    server side integration parameters. The content of this section
+    should be JSON hash map and have **in** and **out**
+    parameters defined. The parameters of **in** define the structure of
+    remote data that is being paginated. The parameters “out” defines
+    the query parameters that are subject to be send to the server. The
+    configuration parameters **in** and **out** helps front-end
+    developer have a free data structure in server side regarding the
+    pagination mechanism. |
+    +——————-+—————————————————————————————————————-+ |
+    **VarGridClientPagerParams** | This section is solely defines the
+    the cilent side parameters. It differs from **out** parameter of
+    **VarGridRemoteDataProviderMapping** in such a way that it does not
+    responsible from integration but the representation of the data in
+    client side. | +——————-+—————————————————————————————————————-+
+    |**VarGridRow**| This section defines the column model of VarGrid.
+    Each VarGridColumn inside VarGridRow should define **label** and
+    **name** attributes that should match the server side’s data array’s
+    column naming policy. The column labeled **checkbox** enables the
+    **VarGrid** have a checkboxed column. The order of checkboxed column
+    can be changed among the column definitions that are defined by
+    **VarGridColumn**. Accordingly, the place of the checboxed column
+    will change.| +——————-+—————————————————————————————————————-+
 
-\[Basic apperance of VarGrid-v025\] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v025-output.png “Var Grid v0.2.5 output screenshot”)
+The configuration above results in a display below if the server side is
+properly configured. There is a server side paginated data
+implementation which is developed by Spring Boot in
+[this](https://github.com/varang/varang-test) address.
 
-For the Spring Boot implementation that is provided in [this](https://github.com/varang/varang-test) address, the rest api provided by **http://localhost:8080/ebys/datarest/persons** produces json structure below.
+\[Basic apperance of VarGrid-v025\]
+(https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v025-output.png
+“Var Grid v0.2.5 output screenshot”)
 
-``` javascript
+For the Spring Boot implementation that is provided in
+[this](https://github.com/varang/varang-test) address, the rest api
+provided by **http://localhost:8080/ebys/datarest/persons** produces
+json structure below.
+
+``` {.javascript}
 {
   "_embedded" : {
     "persons" : [ {
@@ -172,9 +232,11 @@ For the Spring Boot implementation that is provided in [this](https://github.com
 }
 ```
 
-and VarGrid becomes aware of the json structure with the configuration below. VarGrid consumes the "\_embedded.persons" JSON list provided above by having the configuration "list": "\_embedded.persons".
+and VarGrid becomes aware of the json structure with the configuration
+below. VarGrid consumes the "\_embedded.persons" JSON list provided
+above by having the configuration "list": "\_embedded.persons".
 
-``` html
+``` {.html}
     <VarGridRemoteDataProviderMapping>
         {
             "in":{
@@ -204,11 +266,13 @@ VarGrid-v0.2.5 supports
 2.  Configurable GET and POST methods
 3.  Local (static) and remote (REST) data sources.
 4.  Ajax based pagination
-5.  Different varying data structure. One can adapt the data structure mapping by configuration parameters.
+5.  Different varying data structure. One can adapt the data structure
+    mapping by configuration parameters.
 6.  Sorting
 7.  Spring Data Rest integration
 8.  Checkboxed rows
-9.  Event handlings: onComplete, onRequest, onRowInserting, onRowSelect, onDoubleClick, onSorting, onPaging
+9.  Event handlings: onComplete, onRequest, onRowInserting, onRowSelect,
+    onDoubleClick, onSorting, onPaging
 
 ### Events
 
@@ -222,11 +286,13 @@ VarGrid supports events below.
 6.  onSorting
 7.  onPaging
 
-All events are subscribed in the tag **<VarGrid>** and have two phases:before and after. You can see an example [here](#0210-event-interceptor-example).
+All events are subscribed in the tag **<VarGrid>** and have two
+phases:before and after. You can see an example
+[here](#0210-event-interceptor-example).
 
 The type of the events is **VarGridEvent** that has definition below.
 
-``` javascript
+``` {.javascript}
 export enum VarangInterceptor {Before=0, After=1}
 
 export class VarangEvent {
@@ -256,9 +322,10 @@ export class VarGridEvent extends VarangEvent {
 
 Here is an example that sets an event while paging.
 
-Paging callback function should be registered in VarGrid tag as shown below.
+Paging callback function should be registered in VarGrid tag as shown
+below.
 
-``` javascript
+``` {.javascript}
 <VarGrid (onPaging)="onGridPaging($event)">
 ...!configuration parameters!...
 </VarGrid>
@@ -266,7 +333,7 @@ Paging callback function should be registered in VarGrid tag as shown below.
 
 The call back function *onGridPaging* should have implementation below.
 
-``` javascript
+``` {.javascript}
 onGridPaging(event:VarGridEvent) {
     if (event.intercept = VarangInterceptor.Before){
         alert("before paging");
@@ -276,11 +343,15 @@ onGridPaging(event:VarGridEvent) {
 }
 ```
 
-The input parameter of the ongGrdPaging function should be in the VarGridEvent type. To handle different phases of the event, for example before paging or after paging, *event.interceptor* value should be checked as in the example above.
+The input parameter of the ongGrdPaging function should be in the
+VarGridEvent type. To handle different phases of the event, for example
+before paging or after paging, *event.interceptor* value should be
+checked as in the example above.
 
 ### Next to do
 
-VarGrid is still in development. The features below are intented to be developed. The next fetaure to be added is *Changeable column orders*
+VarGrid is still in development. The features below are intented to be
+developed. The next fetaure to be added is *Changeable column orders*
 
 1.  Changeable column orders
 2.  Column grouping

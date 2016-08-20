@@ -84,36 +84,9 @@
 
 <span class="kw">&lt;/VarGrid&gt;</span></code></pre></div>
 <p>There are four configuration sections: VarGridDataSource, VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow having the explanation below.</p>
-<table>
-<colgroup>
-<col width="11%" />
-<col width="88%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Section</th>
-<th>Explanation</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>VarGridDataSource</strong></td>
-<td>The datasource integration is done in this section. The attribute <strong>dataOrigin</strong> defines the location of the datasource. The string <strong>local</strong> indicates that the data source in client side and the string <strong>remote</strong> indicates that the data source in server side. When the <strong>dataOrigin</strong> is defined as <em>remote</em>, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have <strong>url</strong> and its counter value that indicates the remote data source URL serving paginated data source.</td>
-</tr>
-<tr class="even">
-<td><strong>VarGridRemoteDataProviderMapping</strong></td>
-<td>This section defines the server side integration parameters. The content of this section should be JSON hash map and have <strong>in</strong> and <strong>out</strong> parameters defined. The parameters of <strong>in</strong> define the structure of remote data that is being paginated. The parameters “out” defines the query parameters that are subject to be send to the server. The configuration parameters <strong>in</strong> and <strong>out</strong> helps front-end developer have a free data structure in server side regarding the pagination mechanism.</td>
-</tr>
-<tr class="odd">
-<td><strong>VarGridClientPagerParams</strong></td>
-<td>This section is solely defines the the cilent side parameters. It differs from <strong>out</strong> parameter of <strong>VarGridRemoteDataProviderMapping</strong> in such a way that it does not responsible from integration but the representation of the data in client side.</td>
-</tr>
-<tr class="even">
-<td><strong>VarGridRow</strong></td>
-<td>This section defines the column model of VarGrid. Each VarGridColumn inside VarGridRow should define <strong>label</strong> and <strong>name</strong> attributes that should match the server side’s data array’s column naming policy. The column labeled <strong>checkbox</strong> enables the <strong>VarGrid</strong> have a checkboxed column. The order of checkboxed column can be changed among the column definitions that are defined by <strong>VarGridColumn</strong>. Accordingly, the place of the checboxed column will change.</td>
-</tr>
-</tbody>
-</table>
+<ul>
+<li>——————+—————————————————————————————————————-+ | Section | Explanation | +===================+================================================================================================================+ | <strong>VarGridDataSource</strong> | The datasource integration is done in this section. The attribute <strong>dataOrigin</strong> defines the location of the datasource. The string <strong>local</strong> indicates that the data source in client side and the string <strong>remote</strong> indicates that the data source in server side. When the <strong>dataOrigin</strong> is defined as <em>remote</em>, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have <strong>url</strong> and its counter value that indicates the remote data source URL serving paginated data source.| +——————-+—————————————————————————————————————-+ | <strong>VarGridRemoteDataProviderMapping</strong> | This section defines the server side integration parameters. The content of this section should be JSON hash map and have <strong>in</strong> and <strong>out</strong> parameters defined. The parameters of <strong>in</strong> define the structure of remote data that is being paginated. The parameters “out” defines the query parameters that are subject to be send to the server. The configuration parameters <strong>in</strong> and <strong>out</strong> helps front-end developer have a free data structure in server side regarding the pagination mechanism. | +——————-+—————————————————————————————————————-+ | <strong>VarGridClientPagerParams</strong> | This section is solely defines the the cilent side parameters. It differs from <strong>out</strong> parameter of <strong>VarGridRemoteDataProviderMapping</strong> in such a way that it does not responsible from integration but the representation of the data in client side. | +——————-+—————————————————————————————————————-+ |<strong>VarGridRow</strong>| This section defines the column model of VarGrid. Each VarGridColumn inside VarGridRow should define <strong>label</strong> and <strong>name</strong> attributes that should match the server side’s data array’s column naming policy. The column labeled <strong>checkbox</strong> enables the <strong>VarGrid</strong> have a checkboxed column. The order of checkboxed column can be changed among the column definitions that are defined by <strong>VarGridColumn</strong>. Accordingly, the place of the checboxed column will change.| +——————-+—————————————————————————————————————-+</li>
+</ul>
 <p>The configuration above results in a display below if the server side is properly configured. There is a server side paginated data implementation which is developed by Spring Boot in <a href="https://github.com/varang/varang-test">this</a> address.</p>
 <p>[Basic apperance of VarGrid-v025] (https://raw.githubusercontent.com/varang/varang/master/docs/githubpages/images/vargrid-v025-output.png “Var Grid v0.2.5 output screenshot”)</p>
 <p>For the Spring Boot implementation that is provided in <a href="https://github.com/varang/varang-test">this</a> address, the rest api provided by <strong>http://localhost:8080/ebys/datarest/persons</strong> produces json structure below.</p>

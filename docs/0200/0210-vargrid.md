@@ -58,12 +58,19 @@ VarGrid has a syntax below.
 
 There are four configuration sections: VarGridDataSource, VarGridRemoteDataProviderMapping, VarGridClientPagerParams, VarGridRow having the explanation below.
 
-| Section       	| Explanation|
-| ------------- 	|----------------------------------------------------------------------------------------------------------------|
+
+
++ ------------------+----------------------------------------------------------------------------------------------------------------+
+| Section       	| Explanation                                                                                                    |
++===================+================================================================================================================+
 | __VarGridDataSource__ | The datasource integration is done in this section. The attribute __dataOrigin__ defines the location of the datasource. The string __local__ indicates that the data source in client side and the string __remote__ indicates that the data source in server side. When the __dataOrigin__ is defined as _remote_, there should be a JSON hash table in the child content of VarGridDataSource and the hash table should contain a (key, value) pair where the key should have __url__ and its counter value that indicates the remote data source URL serving paginated data source.|
++-------------------+----------------------------------------------------------------------------------------------------------------+
 | __VarGridRemoteDataProviderMapping__     | This section defines the server side integration parameters. The content of this section should be JSON hash map and have __in__ and __out__ parameters defined. The parameters  of __in__ define the structure of remote data that is being paginated. The parameters "out" defines the query parameters that are subject to be send to the server. The configuration parameters __in__ and __out__ helps front-end developer  have a free data structure in server side regarding the pagination mechanism.     |
++-------------------+----------------------------------------------------------------------------------------------------------------+
 | __VarGridClientPagerParams__ | This section is solely defines the the cilent side parameters. It differs from __out__ parameter of __VarGridRemoteDataProviderMapping__ in such a way that it does not responsible from integration but the representation of the data in client side.      |
++-------------------+----------------------------------------------------------------------------------------------------------------+
 |__VarGridRow__| This section defines the column model of VarGrid. Each VarGridColumn inside VarGridRow should define __label__ and __name__ attributes that should match the server side's data array's column naming policy. The column labeled __checkbox__ enables the __VarGrid__ have a checkboxed column. The order of checkboxed column can be changed among the column definitions that are defined by __VarGridColumn__. Accordingly, the place of the checboxed column will change.|
++-------------------+----------------------------------------------------------------------------------------------------------------+
 
 The configuration above results in a display below if the server side is properly configured. There is a server side paginated data implementation which is developed by Spring Boot in [this](https://github.com/varang/varang-test) address. 
 
