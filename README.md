@@ -12,7 +12,7 @@ Table of Content (TOC)
 <div id='0100-introduction'/>
 
 
-VarAng is a UI components library based on Angular 2. At the moment [VarGrid](#0210-VarGrid) (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang) and source code from [here](https://github.com/varang/varang). There is a Spring Data Rest implementation in [this](https://github.com/varang/varang-test) address. Here is the syntax. Varang project aims to develop the components below.
+VarAng is a UI components library based on Angular 2. At the moment [VarGrid](#0210-VarGrid) (data table) is implemented. You can see the npm package from [here](https://www.npmjs.com/package/varang) and source code from [here](https://github.com/varang/varang). There is a Spring Data Rest implementation in [this](https://github.com/varang/varang-test) address. Varang project aims to develop the components below.
 
 1.  [VarGrid](#0210-VarGrid)
 2.  VarTab
@@ -20,7 +20,10 @@ VarAng is a UI components library based on Angular 2. At the moment [VarGrid](#0
 4.  VarTree
 5.  VarTreeTable
 6.  VarList
-7.  VarChat \#\#VarAng Components
+7.  VarChat 
+
+
+## VarAng Components
     <div id='0200-components'/>
 
 VarAng aims to develop the components below.
@@ -40,7 +43,7 @@ VarAng aims to develop the components below.
 
 VarGrid is a datatable that supports the functionalities below at the moment (v0.2.6). There is a VarGrid show case that is integrated with Spring Data Rest in [this](https://github.com/varang/varang-test) address.
 
-VarGrid has a syntax below.
+VarGrid can be defined as in the code segment below.
 
 ``` html
 <VarGrid>
