@@ -4,7 +4,9 @@ Table of Content (TOC)
 -   [0100 Introduction](#0100-Introduction)
 -   [0200 Components](#0200-Components)
 -   [0210 --VarGrid](#0210-VarGrid)
+-   [0220 --VarTab](#0220-VarTab)
 -   [0999 Conclusion](#0999-conclusion)
+-   [0900 halil](#0999-halil)
 
 0100 Introduction
 -----------------
@@ -26,7 +28,7 @@ VarAng is a UI components library based on Angular 2. At the moment [VarGrid](#0
 VarAng aims to develop the components below.
 
 1.  [VarGrid](#0210-VarGrid)
-2.  VarTab
+2.  [VarTab](#0220-VarTab)
 3.  VarMenu
 4.  VarTree
 5.  VarTreeTable
@@ -323,6 +325,37 @@ VarGrid is still in development. The features below are intented to be developed
 10. Adaptable css templates
 11. Editable row
 
+0220 VarTab
+-----------
+
+<div id='0220-VarTab'/>
+
+VarTab is a tab pane that supports the functionalities below at the moment (v0.2.6). There is a VarGrid show case that is integrated with Spring Data Rest in [this](https://github.com/varang/varang-test) address.
+
+<div id="exTab2" class="container">
+<ul class="nav nav-tabs">
+            <li class="active">
+        <a  href="#1" data-toggle="tab">Demo</a>
+            </li>
+            <li><a href="#2" data-toggle="tab">Source Code</a>
+            </li>
+            <li><a href="#3" data-toggle="tab">Documentation</a>
+            </li>
+        </ul>
+
+            <div class="tab-content ">
+              <div class="tab-pane active" id="1">
+                demo
+              </div>
+              <div class="tab-pane" id="2">
+                source code
+              </div>
+              <div class="tab-pane" id="3">
+                documentation
+              </div>
+            </div>
+
+</div>
 0999 Conclusion
 ---------------
 

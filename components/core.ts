@@ -90,6 +90,19 @@ export class VarGridHeaderAction {
 }
 
 
+export class VarTabHeaderModel {
+    name:string;
+    order:number;
+}
+
+export class VarTabContentModel {
+    name:string;
+}
+
+export class TabEvent {
+  success:boolean = false;
+}
+
 // export interface RemoteProviderPagingParams {
 //   list:string;
 //   pageSize:string;

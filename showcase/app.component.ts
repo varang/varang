@@ -2,6 +2,9 @@
 import { Component } from '@angular/core';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {
+	VarTab,VarTabHeader, VarTabContent
+	 } from "../components/VarTab";
+import {
 	VarGrid,
 	VarGridClientPagerParams,
 	VarGridRemoteDataProviderMapping, 
@@ -13,7 +16,7 @@ import {VarGridEvent, VarangInterceptor} from "../components/core";
 
 @Component({
   selector: 'my-app',
-  directives:[VarGrid,VarGridRemoteDataProviderMapping,VarGridClientPagerParams, VarGridRow, VarGridColumn, VarGridDataSource],
+  directives:[VarGrid,VarGridRemoteDataProviderMapping,VarGridClientPagerParams, VarGridRow, VarGridColumn, VarGridDataSource, VarTab, VarTabHeader, VarTabContent],
 providers:[ HTTP_PROVIDERS],
   templateUrl:"showcase/app.component.html" 
 })
