@@ -19,6 +19,11 @@ export class VarangEvent {
 
 
 
+export interface VarTreeItemIconType{
+    iconNo: number;
+    iconClass: string;
+}
+
 export class VarTabHeaderModel {
     name:string;
     order:number;

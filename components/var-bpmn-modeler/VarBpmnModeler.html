@@ -1,0 +1,54 @@
+
+<!--
+
+
+<VarBpmnPalette></VarBpmnPalette>
+
+<div #palette   style="background-color: red;"  (mousemove)="onMouseMove($event)">
+            <div draggable   [dragData]="'UserTask'"
+
+
+                 >(usertask)
+            </div>
+      <div draggable   [dragData]="'Arrow'"
+
+                 >(arrow)
+            </div>
+ </div>
+
+
+
+<div width="20" height="20">test</div>
+
+      <div VarBpmnModelerContainer  #container droppable (onDrop)="onBpmnActivitiDropped($event)"     width="400" height="400" class="container" (mousemove)="onMouseMove($event)" >
+
+
+      </div>
+
+
+
+<br>
+<div >mouse.pos:{{mouse.x}}:{{mouse.y}}</div>
+<div>debug:{{debugMessage}}</div>
+
+
+
+
+-->
+
+
+
+<div style="width: 100%; height: 100%; position: relative;">
+
+    <div class="varbpmnpalette" VarBpmnPalette  style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" [visibleActivities]="visibleActivities_" >
+    </div>
+
+    <div VarBpmnModelerContainer  #container    class="varbpmnmodelercontainer" (onFocusedActiviti)="handleFocusedActiviti($event)"></div>
+    <div style="clear:both;"></div>
+
+    <div VarBpmnPropertyEditor [packagePrefix]="packagePrefix" style="top-margin:30px;position: relative;" ></div>
+
+</div>
+<div style="clear:both;"></div>
+<div style="top-margin:30px;position: relative;">activiti objects count:{{bpmnService.bucket.length}}</div>
+
