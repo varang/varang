@@ -1,18 +1,19 @@
-var webpack = require("webpack");
+/**
+ * @author: @AngularClass
+ */
 
-module.exports = {
-    entry: {
-        'polyfills': './showcase/polyfills.js',
-        'vendor': './showcase/vendor.js',
-        'app': './showcase/main.js'
-    },
-    output: {
-        path: __dirname,
-        filename: "./showcase/[name].js"
-    },
-    plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: ['app', 'vendor', 'polyfills']
-        })
-    ]
-};
+// Look in ./config folder for webpack.dev.js
+switch (process.env.NODE_ENV) {
+    case 'prod':
+    case 'production':
+        module.exports = require('./config/webpack.prod');
+        break;
+    case 'test':
+    case 'testing':
+        module.exports = require('./config/webpack.test');
+        break;
+    case 'dev':
+    case 'development':
+    default:
+        module.exports = require('./config/webpack.dev');
+}

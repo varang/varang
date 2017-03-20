@@ -80,7 +80,6 @@ export class VarTabContentView {
 
 @Component({
 	selector: 'VarTab',
-	directives:[VarTabHeader, VarTabContent, VarTabHeaderView, VarTabContentView ],
 	template: `
 		activeTabNo: {{activeTabNo}}
 		<div class="vartab">

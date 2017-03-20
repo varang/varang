@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import {VarangInterceptor} from "../components/core";
-import {VarGridEvent} from "../components/var-grid/VarGrid";
+import {Component} from "@angular/core";
+
 
 @Component({
-  selector: 'my-app',
-  templateUrl:"showcase/app.component.html"
+	selector:'VarGridAjaxPage',
+	templateUrl:"components/var-grid/var-grid-page-ajax.component.html"
+	
 })
-export class AppComponent {
+export class VarGridAjaxPage {
 
 	jsonMapper={
 		"in":{
@@ -53,21 +53,9 @@ export class AppComponent {
 			{"id":9, "name":"joan9", "surname":"doe9", "age":26},
 			{"id":10, "name":"joan10", "surname":"doe10", "age":27},
 			{"id":11, "name":"joan11", "surname":"doe11", "age":28}
-
+			
 		];
 	}
-
-
-gridRowSelected(event:VarGridEvent) {
-	//alert("rowid:"+JSON.stringify(event.value.rowId));
 }
 
-onGridPaging(event:VarGridEvent) {
-	if (event.intercept = VarangInterceptor.Before){
-		//alert("before paging");
-	} else if (event.intercept = VarangInterceptor.After) {
-		//alert("after paging");
-	}
-}
-}
 

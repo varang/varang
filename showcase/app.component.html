@@ -54,70 +54,19 @@
 
 
 
-<div >
 
-<!-->
- 
-<VarGrid (onRowSelected)="gridRowSelected($event)" (onPaging)="onGridPaging($event)">
-	<VarGridDataSource methodType="GET" dataOrigin="remote" 
-		[loadOnInit]="true"  url="url" serverType="spring-datarest">
-		{
-		"url":"http://activiti:8281/ebys/datarest/persons"
-		}
-	</VarGridDataSource>
-	
-	<VarGridRemoteDataProviderMapping>
-		{
-		    "in":{
-			    "jsonXPath":
-			    	{
-				    	"list": "_embedded.persons",
-				    	"pageSize": "page.size",
-				    	"pageIndex": "page.number",
-				    	"total": "page.totalElements"
-			    	}
-		    },
-		    "out":{
-		    	"pageStart": "page",
-		    	"pageSize": "rows",
-		    	"sortIndex":"sidx",
-		    	"sortOrder": "sort"
-		    }
-		}
-	</VarGridRemoteDataProviderMapping>		
+<div class="container">
+    <VarGrid [methodType]="'GET'" [dataOrigin]="'remote'"  [loadOnInit]="true" [serverType]="'spring-datarest'" [url]="'http://localhost:8281/ebys/datarest/persons'"
+             [jsonMapper]="jsonMapper" [clientPagerParams]="clientPagerParams">
 
-	<VarGridClientPagerParams>
-		{
-		    "id":"id",
-		    "sortIndex": "id",
-		    "pageSize": 10,
-		    "pageSizes": [10,30,50],
-		    "sortOrder": "ASC",
-		    "pageStart": 0
-		}
-	</VarGridClientPagerParams>	
+        <VarGridRow>
+            <VarGridColumn label="id" name="id" styleClass="grid_id" ></VarGridColumn>
+            <VarGridColumn label="label" name="label" styleClass="grid_name" ></VarGridColumn>
+            <VarGridColumn label="firstName" name="firstName" styleClass="grid_firstName" ></VarGridColumn>
+        </VarGridRow>
 
-	<VarGridRow>
-    <VarGridColumn label="checkbox" styleClass="grid_checkbox" type="checkbox" ></VarGridColumn>
-		<VarGridColumn label="id" name="id" styleClass="grid_id" ></VarGridColumn>
-		<VarGridColumn label="name" name="name" styleClass="grid_name" ></VarGridColumn>
-		<VarGridColumn label="firstName" name="firstName" styleClass="grid_firstName" ></VarGridColumn>
-	</VarGridRow>
+    </VarGrid>
 
-</VarGrid>
-
-</-->
-
-<VarTab>
-
-  <VarTabHeader name="profile" (TabEvent)="vtProfile($event)">profile</VarTabHeader>
-  <VarTabHeader name="messages" (TabEvent)="vtMessages($event)">messages</VarTabHeader>
-  <VarTabHeader name="home" (TabEvent)="vtName($event)">home</VarTabHeader>
-  
-  <VarTabContent name="profile"><span style="color:red;">profile content</span></VarTabContent>
-  <VarTabContent name="messages"><span style="color:green;">messages content</span></VarTabContent>
-  <VarTabContent name="home"><span style="color:blue;">home content</span></VarTabContent>
-  
-</VarTab>
 
 </div>
+

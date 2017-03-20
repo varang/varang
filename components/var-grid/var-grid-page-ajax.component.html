@@ -1,0 +1,16 @@
+
+<div class="container">
+<VarGrid [methodType]="'GET'" [dataOrigin]="'remote'"  [loadOnInit]="true" [serverType]="'spring-datarest'" [url]="'http://localhost:8281/ebys/datarest/persons'"
+    [jsonMapper]="jsonMapper" [clientPagerParams]="clientPagerParams"
+>
+
+	<VarGridRow>
+		<VarGridColumn label="id" name="id" styleClass="grid_id" ></VarGridColumn>
+		<VarGridColumn label="label" name="label" styleClass="grid_name" ></VarGridColumn>
+		<VarGridColumn label="firstName" name="firstName" styleClass="grid_firstName" ></VarGridColumn>
+	</VarGridRow>
+
+</VarGrid>
+
+
+</div>

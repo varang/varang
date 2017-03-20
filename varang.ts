@@ -1,2 +1,2 @@
-export * from './components/VarGrid';
+export * from './components/var-grid/VarGrid';
 export * from './components/core';
