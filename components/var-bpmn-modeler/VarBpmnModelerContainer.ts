@@ -95,7 +95,6 @@ export class VarBpmnModelerContainer implements AfterViewInit {
                 if (item.type===BpmnActivitiType.Arrow){
                     let arrow_:VarBpmnArrow= <VarBpmnArrow>item;
                     let abs_=Math.abs( arrow_.angle()-arrow_.angleTarget(x,y));
-
                     if (abs_<2)
                         item_= item;
                 } else {
@@ -413,12 +412,14 @@ export class VarBpmnModelerContainer implements AfterViewInit {
 
             if (this.bpmnService.focusedBpmnObject.fromArrow!=null)
                 this.bpmnService.focusedBpmnObject.fromArrow.forEach((fr)=>{
-                    fr.init(this.bpmnService.findActivitiById(fr.fromId[0]), this.bpmnService.focusedBpmnObject);
+                    let arr = <VarBpmnArrow>fr;
+                    arr.init(this.bpmnService.findActivitiById(fr.fromId[0]), this.bpmnService.focusedBpmnObject);
                 });
 
             if (this.bpmnService.focusedBpmnObject.toArrow!=null)
                 this.bpmnService.focusedBpmnObject.toArrow.forEach((t)=>{
-                    t.init(this.bpmnService.focusedBpmnObject, this.bpmnService.findActivitiById(t.toId[0]));
+                    let arr = <VarBpmnArrow>t;
+                    arr.init(this.bpmnService.focusedBpmnObject, this.bpmnService.findActivitiById(t.toId[0]));
                 });
 
 

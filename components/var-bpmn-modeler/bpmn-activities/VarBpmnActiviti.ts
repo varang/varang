@@ -115,9 +115,10 @@ export class VarBpmnActiviti implements VarBpmnActivitiable {
     id: string=null;
     fromId: string[];
     toId: string[];
-    fromArrow:VarBpmnArrow[];
-    toArrow:VarBpmnArrow[];
-
+    fromArrow:VarBpmnActivitiable[];
+    toArrow:VarBpmnActivitiable[];
+    from:Point;
+    to:Point;
     title: string="t143";
     x: number = 0;
     y: number = 0;

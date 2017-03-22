@@ -4,7 +4,6 @@
 import {Component, Input, EventEmitter, Output} from '@angular/core';
 import {VarTreeItemIconType} from "../core";
 import {VarTreeItem} from "../var-treeview/VarTreeView";
-import * as _ from 'lodash';
 import {VarBpmnRestService} from "../services/restservice.service";
 import {varConsole} from "../util/VarConsole";
 import {MOrganization} from "../models/var.model.frontend";
@@ -147,22 +146,18 @@ export class VarBpmnOrganizationTree {
 
     fetchORGs(){
         this.array = null;
-//TODO:halil
-//         this.restService.fetchOrganizationTree(cb:(any)=>any, successFn, errorFn, {
-//             cbSuccess: (data) => {//lambda notation
-//                 this.treeItems = null;
-//                 this.array = <MOrganization[]>data;
-//                 this.roots = null;
-//
-//                 this.copyORGsToTreeItems();
-//                 // ebysConsole.info("Organization listall " + this.array);
-//                 this.loadTree();
-//
-//             },
-//             cbError: (err) => {
-//                 ebysConsole.log(err);
-//             }
-//         });
+        this.restService.fetchOrganizationTree(
+            (data) => {//lambda notation
+                this.treeItems = null;
+                this.array = <MOrganization[]>data;
+                this.roots = null;
+                this.copyORGsToTreeItems();
+                this.loadTree();
+            },
+            (err) => {
+                console.error(err);
+            }
+        );
     }
 
 }

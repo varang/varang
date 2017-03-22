@@ -10,8 +10,10 @@ export interface VarBpmnActivitiable {
     type:number;
     fromId:string[];
     toId:string[];
-    fromArrow:VarBpmnArrow[];
-    toArrow:VarBpmnArrow[];
+    fromArrow:VarBpmnActivitiable[];
+    toArrow:VarBpmnActivitiable[];
+    from:Point;
+    to:Point;
     active:boolean;
     assignee:string;
     multiInstanse:number;

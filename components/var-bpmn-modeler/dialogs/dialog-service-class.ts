@@ -59,17 +59,16 @@ export class VarBpmnDialogServiceClass {
     load(cb:(data)=>any){
         //TODO:halil
         if (this.classes.length==0){
-            // this.http.get(bpmnRestEndPoints.Bpmn_listServiceTask+"/vbt.ebys.bpmn.service" , EbysDefaultHeader).subscribe(
-            //     payload=>{
-            //         let bodyString:string = JSON.parse(JSON.stringify(payload))._body;
-            //         this.classes = JSON.parse(bodyString);
-            //         varConsole.info(this.classes);
-            //         cb(this.classes);
-            //     },
-            //     error => {
-            //         varConsole.error(error);
-            //     }
-            // );
+            this.restService.fetchBpmnServiceClasses(payload=>{
+                    let bodyString:string = JSON.parse(JSON.stringify(payload))._body;
+                    this.classes = JSON.parse(bodyString);
+                    varConsole.info(this.classes);
+                    cb(this.classes);
+                },
+                error => {
+                    varConsole.error(error);
+                }
+            );
         }
     }
 

@@ -56,8 +56,10 @@ export class VarBpmnProcess implements VarBpmnActivitiable {
     type: number=BpmnActivitiType_.Process;
     fromId: string[];
     toId: string[];
-    fromArrow: VarBpmnArrow[];
-    toArrow: VarBpmnArrow[];
+    fromArrow:VarBpmnActivitiable[];
+    toArrow:VarBpmnActivitiable[];
+    from:Point;
+    to:Point;
     active: boolean;
 
     position(): Point {
@@ -129,8 +131,10 @@ export class GenericActiviti implements VarBpmnActivitiable {
     type: number=BpmnActivitiType_.Process;
     fromId: string[];
     toId: string[];
-    fromArrow: VarBpmnArrow[];
-    toArrow: VarBpmnArrow[];
+    fromArrow:VarBpmnActivitiable[];
+    toArrow:VarBpmnActivitiable[];
+    from:Point;
+    to:Point;
     active: boolean=false;
     assignee:string="";
 

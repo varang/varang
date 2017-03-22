@@ -1,10 +1,8 @@
 import {VarBpmnActivitiable} from "./VarBpmnActivitiable";
-import {Component, EventEmitter, ComponentFactoryResolver, Renderer} from '@angular/core';
+import {Component} from '@angular/core';
 import {Point} from "../VarBpmnShapes";
 import {UUID} from "angular2-uuid";
-import {HtmlHelper} from "../../helpers/HtmlHelper";
 import {BpmnActivitiType} from "../VarBpmnService";
-import {varConsole} from "../../util/VarConsole";
 
 
 //see: http://stackoverflow.com/questions/19382872/how-to-connect-html-divs-with-lines
@@ -58,7 +56,8 @@ import {varConsole} from "../../util/VarConsole";
 
 
 })
-export class VarBpmnArrow implements VarBpmnActivitiable{
+
+export class VarBpmnArrow implements VarBpmnActivitiable {
     class: string;
     delegateExp: string;
     resultVarName: string;
@@ -83,8 +82,8 @@ export class VarBpmnArrow implements VarBpmnActivitiable{
     title: string;
     from:Point;
     to:Point;
-    fromArrow:VarBpmnArrow[];
-    toArrow:VarBpmnArrow[];
+    fromArrow:VarBpmnActivitiable[];
+    toArrow:VarBpmnActivitiable[];
     width:string="1px";
     length:string="0px";
     left:string;
@@ -95,6 +94,7 @@ export class VarBpmnArrow implements VarBpmnActivitiable{
     assignee:string;
     triangleCss;
     arrowCondition: string;
+
 
 
     constructor() {
@@ -180,7 +180,7 @@ export class VarBpmnArrow implements VarBpmnActivitiable{
             return false; 
         return true;
      }   
-    private distance(from: Point, to: Point) {
+    private distance(from: Point, to: Point):number {
         if (this.possibleDrawing(from, to)==false)
             return 0;
         var length = Math.sqrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y)); 
